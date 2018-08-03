@@ -617,27 +617,4 @@ DicAuthenticateUser (dicUserDataType *dicUser)
       return dicNicknameNotExist;
 }
 
-/*
- *
- * Arguments:
- *
- *
- * Returned values:
- *
- *
- * Description:
- * This function receive as parameter pointer to all possible fields of the binary files of system and
- * each field is written in file if your pointer differs from NULL.
- * The fields are written in file in the parameters order except for time and user identifiers parameters.
- * The sorting criterion is necessary for determine if time argument is written before or after the user identifier parameters
- * in adaptation to already written code of system and for a possible future incrementation in function with other sorting criteria
- * or with the selection of user position in file according to sorting criterion.
- */
-DicWriteInBinaryFile (char dicSortingCriterion, char* dicFileName, time_t *dicTime, dicUserProfileType *dicUserId1, dicUserProfileType *dicUserId2, char *dicPassword, char *dicEmail, char *dicEmailChangeKey, char *dicCookieValue, char* dicUserIp)
-{
-   FILE *dicBinaryFile;
-
-   dicBinaryFile = fopen (dicFileName, "a");
-}
-
 /*$RCSfile: dicFunctions.c,v $*/

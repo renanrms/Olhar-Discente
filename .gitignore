@@ -4,6 +4,7 @@
 **/*.old
 **/*.core
 
+C/*.cgi
 C/dicUserInterface
 C/dicHtmlToC
 
