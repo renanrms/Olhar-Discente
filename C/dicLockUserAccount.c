@@ -62,7 +62,7 @@ DicLockUserAccount (char *dicAdministratorNickname, char *dicLockedNickname)
 
 	char *validation;
 
-	dicErrorType dicReturnCode;
+	time_t dicLockTime;
 
 
 	if (dicAdministratorNickname == NULL || dicLockedNickname == NULL)
@@ -102,10 +102,12 @@ DicLockUserAccount (char *dicAdministratorNickname, char *dicLockedNickname)
 	/*open locked users data file*/
 	dicLockedUsersFile = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_LOCKED_USERS_DATA_FILENAME), "a");
 
+	dicLockTime = time (NULL);
+
 	/*<locked userId><admin userId><lock time><encoded password>*/
 	fwrite (&(dicLockedUser->userId), sizeof (dicUserIdentifierType), 1, dicLockedUsersFile);
 	fwrite (&(dicAdministrator->userId), sizeof (dicUserIdentifierType), 1, dicLockedUsersFile);
-	fwrite (&(time (NULL)), sizeof (time_t), 1, dicLockedUsersFile);
+	fwrite (&(dicLockTime), sizeof (time_t), 1, dicLockedUsersFile);
 	fwrite (dicLockedUser->password, sizeof (char), DIC_PASSWORD_MAX_LENGTH, dicLockedUsersFile);
 
 	/*open users file and temporary users file*/
@@ -146,14 +148,14 @@ DicLockUserAccount (char *dicAdministratorNickname, char *dicLockedNickname)
 	strcpy (dicLockedFirstName, dicLockedUser->username);
 	strtok (dicLockedFirstName, " ");
 
-	snprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+	snprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
 	        "Hi, ", dicLockedFirstName,
 	        "\n\nYour account in Olhar Discente has been blocked.\n",
 	        "For unlock your account access: ", DIC_WEB_SERVER_URL, "CGIs/dicUnlockUserAccountForm.cgi?dicLanguage=dicEnglish\n\n\n",
 	        "For more informations contact us or visit the site: ", DIC_WEB_SERVER_URL, "CGIs/dicMain.cgi?dicLanguage=dicEnglish\n",
 	        "In majority of the e-mail systems this is a blue link and you can click. In other cases copy for your browser.\n\n\n",
 	        "-------------------------------------------------------\n\n\n",
-	        "Olá, ", dicFirstName,
+	        "Olá, ", dicLockedFirstName,
 	        "\n\nSua conta em Olhar Discente foi bloqueada.\n",
 	        "Para desbloquear sua conta acesse: ", DIC_WEB_SERVER_URL, "CGIs/dicUnlockUserAccountForm.cgi?dicLanguage=dicPortuguese\n\n\n",
 	        "Para mais informações contacte-nos ou acesse: ", DIC_WEB_SERVER_URL, "CGIs/dicMain.cgi?dicLanguage=dicPortuguese\n",

@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "dicGetUnlockingRequests.h"
 #include "dicGetUsers.h"
@@ -54,7 +55,7 @@ DicGetUnlockingRequests (dicNicknameListType **dicFirstNickname)
 	struct dicUserIdentifiers *dicFirstIdentifier = NULL;
 	struct dicUserIdentifiers *dicIdentifierPrevious;
 
-	dicNicknameListType dicNicknames = NULL;
+	dicNicknameListType *dicNicknames = NULL;
 
 	dicUserDataType *dicUser;
 	dicUserDataType *dicFirstUser;
@@ -67,7 +68,7 @@ DicGetUnlockingRequests (dicNicknameListType **dicFirstNickname)
 	dicErrorType dicReturnCode;
 
 
-	if (dicFirstRequestingUser == NULL)
+	if (dicFirstNickname == NULL)
 		return dicInvalidArgument;
 
 	dicUnlockingUsersFile = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_UNLOCKING_USERS_DATA_FILENAME), "r");

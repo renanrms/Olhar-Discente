@@ -27,6 +27,7 @@
 #include "dicApproveRegistrationRequest.h"
 #include "dicDisapproveRegistrationRequest.h"
 #include "dicGetUnlockingRequests.h"
+#include "dicLockUserAccount.h"
 #include "dicAcceptInvite.h"
 #include "dicRejectInvite.h"
 #include "dicShowCliHelp.h"

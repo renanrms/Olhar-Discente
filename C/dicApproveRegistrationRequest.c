@@ -258,7 +258,7 @@ DicApproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequesting
 		DIC_SMTP_SERVER_FULL_HOSTNAME,
 		DIC_SMTP_SERVER_PORT,
 		DIC_PRIMARY_ADMINISTRATOR_EMAIL, /*From Admin*/
-		dicUserData->email, /*To*/
+		dicRequesting->email, /*To*/
 		NULL, /*cc*/
 		NULL, /*bcc*/
 		"Olhar Discente - User Registration Approved", /*Subject*/

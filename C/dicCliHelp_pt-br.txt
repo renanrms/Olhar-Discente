@@ -59,3 +59,4 @@ Alterar o perfil de um usuário: -g / --group user=<apelido> nickname=<apelido> 
 Obter todos os usuários: -s / --show [language=english | portuguese]
 
 Buscar informações sobre usuários com certos filtros: -S / --Search [username=<nome completo ou parte do nome>] [email=<endereço eletrônico ou parte do endereço eletrônico>] [profile=<perfil> [language=english | portuguese]
+

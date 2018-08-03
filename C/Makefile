@@ -42,7 +42,9 @@ DIC_OBJS = dic.o\
            dicGetPendingRegistrationRequests.o\
            dicGetPendingRegistrationRequestsPerUser.o\
            dicApproveRegistrationRequest.o\
-           dicDisapproveRegistrationRequest.o
+           dicDisapproveRegistrationRequest.o\
+           dicGetUnlockingRequests.o\
+           dicLockUserAccount.o
 
 #CGIs
 DIC_MAIN_OBJS = dicCgiMain.o dicUserInterface.o dicFunctions.o dicGetUsers.o

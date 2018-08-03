@@ -40,6 +40,8 @@ typedef enum
 	dicNotInvitedUser,
 	dicNotRequestingUser,
 	dicNotResponsibleUser,
+	dicLockedUserNotFound,
+	dicUserIsPending,
 	/*File not found*/
 	dicHelpNotFound,
 	dicLicenseNotFound,
