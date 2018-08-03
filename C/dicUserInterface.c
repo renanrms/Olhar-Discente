@@ -15,10 +15,12 @@
 char *dicCliUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesAmount] =
 {
    {
-      "Invalid suboption"
+      "message 1",
+      "message 2"
    },
    {
-      "Sub-opcao invalida"
+      "mensagem 1",
+      "mensagem 2"
    }
 };
 
@@ -26,9 +28,11 @@ char *dicNcursesUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessa
 {
    {
       "message 1",
+      "message 2"
    },
    {
       "mensagem 1",
+      "mensagem 2"
    }
 };
 

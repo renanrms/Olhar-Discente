@@ -14,13 +14,7 @@
 
 #include "dicTypes.h"
 
-typedef enum
-{
-	dicOk,
-	dicHelpNotFound,
-	dicLicenseNotFound,
-	dicErrorCodesAmount
-} dicErrorType;
+typedef enum{dicOk, dicHelpNotFound, dicLicenseNotFound, dicErrorCodesAmount} dicErrorType;
 
 
 /* 
