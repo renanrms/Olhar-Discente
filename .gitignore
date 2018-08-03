@@ -1,0 +1,11 @@
+**/*~
+**/*.o
+**/*.so
+**/*.old
+**/*.core
+
+C/dicUserInterface
+
+**/RCS/
+
+**/*.geany
