@@ -276,6 +276,79 @@ DicCheckPassword (char*, char*);
 dicErrorType
 DicAuthenticateUser (dicUserDataType*);
 
+/* dicErrorType
+ * DicWriteInBinaryFile (char, char*, time_t*, dicUserProfileType*, dicUserProfileType*, char*, char*, char*);
+ *
+ * Arguments:
+ * char - sorting criterion, 'i' indicates the first user identifier argument and 't' indicates time argument (O)
+ * char* - name of the binary file name (O)
+ * time_t* - pointer to time (O)
+ * dicUserProfileType* - pointer to first user identifier (O)
+ * dicUserProfileType* - pointer to second user identifier (O)
+ * char* - password string (O)
+ * char* - email string (O)
+ * char* - email change key string (O)
+ *
+ * Returned values:
+ * dicOk - user writen successfully
+ * dicInvalidArgument - file name argument is NULL pointer or sorting criterion is invalid or is incompatible with other arguments
+ *
+ * Description:
+ * This function write in file all parameters (except the first and second) that are valid pointers
+ * (differs from NULL) in the parameters order.
+ * The sorting criterion 't' write the information at end of file and the 'i' write the information
+ * before the first user that has a user identifier bigger than your.
+ */
+dicErrorType
+DicWriteInBinaryFile (char, char*, time_t*, dicUserProfileType*, dicUserProfileType*, char*, char*, char*);
+
+/*
+ * dicErrorType
+ * DicReadNextInformationInBinaryFile (FILE*, time_t*, dicUserProfileType*, dicUserProfileType*, char*, char*, char*);
+ *
+ * Arguments:
+ * FILE* - file for read (I)
+ * time_t* - pointer to time (I/O)
+ * dicUserProfileType* - pointer to first user identifier (I/O)
+ * dicUserProfileType* - pointer to second user identifier (I/O)
+ * char* - password string (I/O)
+ * char* - email string (I/O)
+ * char* - email change key string (I/O)
+ *
+ * Returned values:
+ * dicOk - information is read successfully
+ * dicInvalidArgument - pointer to file argument is NULL
+ * dicEndOfFile - end of file is encountered
+ *
+ * Description:
+ * This function read from file all parameters (except the first) that are valid pointers (differs from NULL) in the parameters order.
+ */
+dicErrorType
+DicReadNextInformationInBinaryFile (FILE*, time_t*, dicUserProfileType*, dicUserProfileType*, char*, char*, char*);
+
+/*
+ * dicErrorType
+ * DicWriteNextInformationInBinaryFile (FILE*, time_t*, dicUserProfileType*, dicUserProfileType*, char*, char*, char*);
+ *
+ * Arguments:
+ * FILE* - file for write (I)
+ * time_t* - pointer to time (I)
+ * dicUserProfileType* - pointer to first user identifier (I)
+ * dicUserProfileType* - pointer to second user identifier (I)
+ * char* - password string (I)
+ * char* - email string (I)
+ * char* - email change key string (I)
+ *
+ * Returned values:
+ * dicOk - information is writen successfully
+ * dicInvalidArgument - pointer to file argument is NULL
+ *
+ * Description:
+ * This function write in file all parameters (except the first) that are valid pointers (differs from NULL) in the parameters order.
+ */
+dicErrorType
+DicWriteNextInformationInBinaryFile (FILE*, time_t*, dicUserProfileType*, dicUserProfileType*, char*, char*, char*);
+
 #endif 
 
 /*$RCSfile: dicFunctions.h,v $*/
