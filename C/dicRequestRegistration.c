@@ -61,8 +61,8 @@ DicRequestRegistration(char *dicResponsibleEmail, dicUserDataType *dicRequesting
 	FILE *dicRequestingUsersFile;
 	FILE *dicUsersFile;
 
-	dicUserDataType dicUser;
-	dicUserDataType dicResponsibleUser = NULL;
+	dicUserDataType *dicUser;
+	dicUserDataType *dicResponsibleUser = NULL;
 	char dicResponsibleFirstName [DIC_USERNAME_MAX_LENGTH];
 
 	char dicFirstNickname [DIC_NICKNAME_MAX_LENGTH];
@@ -71,8 +71,6 @@ DicRequestRegistration(char *dicResponsibleEmail, dicUserDataType *dicRequesting
 	char dicEmailBody [DIC_EMAIL_BODY_MAX_LENGTH];
 
 	time_t dicAbsoluteValidityTime;
-
-	unsigned char dicFoundEmail = 0; /*flag variable*/
 
 	dicErrorType dicReturnCode;
 
@@ -102,7 +100,7 @@ DicRequestRegistration(char *dicResponsibleEmail, dicUserDataType *dicRequesting
 	dicReturnCode = DicCreateNickname (dicRequestingUser->username, dicFirstNickname, dicSecondNickname);
 	if (dicReturnCode != dicOk)
 		return dicReturnCode;
-	dicRequestingUser->nickname = dicFirstNickname;
+	strcpy (dicRequestingUser->nickname, dicFirstNickname);
 
 	DicGetUsers (&dicUser);
 	/*search user email and verifys requesting user email and nickname*/
@@ -115,7 +113,7 @@ DicRequestRegistration(char *dicResponsibleEmail, dicUserDataType *dicRequesting
 			dicResponsibleUser = dicUser;
 
 		if (!strcmp (dicUser->nickname, dicRequestingUser->nickname))
-			dicRequestingUser->nickname = dicSecondNickname;
+			strcpy (dicRequestingUser->nickname, dicSecondNickname);
 
 		dicRequestingUser->userId = dicUser->userId;
 
@@ -163,7 +161,7 @@ DicRequestRegistration(char *dicResponsibleEmail, dicUserDataType *dicRequesting
 	strcpy (dicResponsibleFirstName, dicResponsibleUser->username);
 	strtok (dicResponsibleFirstName, " ");
 
-	sprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+	snprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
 	        "Hi, ", dicResponsibleFirstName, "!\n\n",
 	        "You was indicated by ", dicRequestingUser->username, " for approve your registration as ",
 	        DicGetUserProfileString (dicRequestingUser->profile, dicEnglish), " at Olhar Discente.\n\n\n",
@@ -185,7 +183,7 @@ DicRequestRegistration(char *dicResponsibleEmail, dicUserDataType *dicRequesting
 		DIC_SMTP_SERVER_FULL_HOSTNAME,
 		DIC_SMTP_SERVER_PORT,
 		DIC_PRIMARY_ADMINISTRATOR_EMAIL, /*From Admin*/
-		dicUserData->email, /*To*/
+		dicResponsibleUser->email, /*To*/
 		NULL, /*cc*/
 		NULL, /*bcc*/
 		"Olhar Discente - User Registration Request", /*Subject*/

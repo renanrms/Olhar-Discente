@@ -56,7 +56,6 @@ DicGetPendingRegistrationRequests (dicUserDataType **dicFirstRequestingUser)
 	dicUserIdentifierType dicUserId2;
 	char dicEncodedPassword [DIC_PASSWORD_MAX_LENGTH + 1];
 
-	char *validation;
 	size_t dicReadBytes;
 
 	dicErrorType dicReturnCode;
@@ -93,7 +92,7 @@ DicGetPendingRegistrationRequests (dicUserDataType **dicFirstRequestingUser)
 			else
 			{
 				dicRequestingUser = malloc (sizeof (dicUserDataType));
-				dicRequestingUser->previous = NULL
+				dicRequestingUser->previous = NULL;
 			}
 
 			dicRequestingUser->userId = dicUserId1;

@@ -60,10 +60,10 @@ DicApproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequesting
 	unsigned char dicFoundResponsibleUser = 0; /*flag variable*/
 	unsigned char dicFoundRequestingUser = 0; /*flag variable*/
 
+	dicUserDataType *dicResponsible;
 	dicUserDataType *dicRequesting;
 	dicUserDataType *dicUser;
 
-	dicUserIdentifierType dicResponsibleUserId;
 	dicUserIdentifierType dicUserId1;
 	dicUserIdentifierType dicUserId2;
 
@@ -87,7 +87,9 @@ DicApproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequesting
 		if (!strcmp (dicUser->nickname, dicResponsibleNickname))
 		{
 			dicFoundResponsibleUser = 1;
-			dicResponsibleUserId = dicUser->userId;
+			dicResponsible->userId = dicUser->userId;
+			dicResponsible->profile = dicUser->profile;
+			strcpy (dicResponsible->username, dicUser->username);
 				
 			if (dicFoundRequestingUser)
 				break;
@@ -123,17 +125,17 @@ DicApproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequesting
 	dicRequestingUsersFile = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_REQUESTING_USERS_DATA_FILENAME), "r");
 	dicRequestingUsersFile_Temp = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, ".temporary_requesting.users"), "w");
 
+	/*<validity><userId><encoded password>*/
+	fread (&(dicAbsoluteValidityTime), sizeof (time_t), 1, dicRequestingUsersFile);
+	fread (&(dicUserId1), sizeof (dicUserIdentifierType), 1, dicRequestingUsersFile);
+	fread (&(dicUserId2), sizeof (dicUserIdentifierType), 1, dicRequestingUsersFile);
+	dicReadBytes = fread (dicEncodedPassword, sizeof (char), DIC_PASSWORD_MAX_LENGTH, dicRequestingUsersFile);
+	dicEncodedPassword [DIC_PASSWORD_MAX_LENGTH + 1] = DIC_EOS;
+
 	dicFoundRequestingUser = 0;
 	/*copy from requesting users file to temporary file and search the userId corresponding to nickname*/
 	while (dicReadBytes == sizeof (time_t) + 2*sizeof (dicUserIdentifierType) + DIC_PASSWORD_MAX_LENGTH*sizeof (char))
 	{
-		/*<validity><userId><encoded password>*/
-		fread (&(dicAbsoluteValidityTime), sizeof (time_t), 1, dicRequestingUsersFile);
-		fread (&(dicUserId1), sizeof (dicUserIdentifierType), 1, dicRequestingUsersFile);
-		fread (&(dicUserId2), sizeof (dicUserIdentifierType), 1, dicRequestingUsersFile);
-		dicReadBytes = fread (dicEncodedPassword, sizeof (char), DIC_PASSWORD_MAX_LENGTH, dicRequestingUsersFile);
-		dicEncodedPassword [DIC_PASSWORD_MAX_LENGTH + 1] = DIC_EOS;
-
 		/*found user. This line is not copy*/
 		if (dicUserId1 == dicRequesting->userId)
 		{
@@ -149,7 +151,8 @@ DicApproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequesting
 				remove (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, ".temporary_requesting.users"));
 				return dicNotRequestingUser;
 			}
-			if (dicUserId2 != dicResponsibleUserId)
+
+			if (dicUserId2 != dicResponsible->userId && dicResponsible->profile % 2 != 1)
 			{
 				fclose (dicUsersFile);
 				fclose (dicUsersFile_Temp);
@@ -159,6 +162,7 @@ DicApproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequesting
 				remove (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, ".temporary_requesting.users"));
 				return dicNotResponsibleUser;
 			}
+
 		}
 		else /*not is the requesting user. Copy data for temporary file*/
 		{
@@ -167,7 +171,15 @@ DicApproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequesting
 			fwrite (&(dicUserId2), sizeof (dicUserIdentifierType), 1, dicRequestingUsersFile_Temp);
 			fwrite (dicEncodedPassword, sizeof (char), DIC_HASH_SHA512_LENGTH, dicRequestingUsersFile_Temp);
 		}
+
+		/*<validity><userId><encoded password>*/
+		fread (&(dicAbsoluteValidityTime), sizeof (time_t), 1, dicRequestingUsersFile);
+		fread (&(dicUserId1), sizeof (dicUserIdentifierType), 1, dicRequestingUsersFile);
+		fread (&(dicUserId2), sizeof (dicUserIdentifierType), 1, dicRequestingUsersFile);
+		dicReadBytes = fread (dicEncodedPassword, sizeof (char), DIC_PASSWORD_MAX_LENGTH, dicRequestingUsersFile);
+		dicEncodedPassword [DIC_PASSWORD_MAX_LENGTH + 1] = DIC_EOS;
 	}
+
 	/*not found user. Indicates that user is in other pendent state*/
 	if (!dicFoundRequestingUser)
 	{
