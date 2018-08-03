@@ -44,8 +44,9 @@
 #define DIC_EMAIL_CARACTERS            "@.-_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 
 #define DIC_LANGUAGE_MAX_LENGTH        64
-#define DIC_FILE_PATH_MAX_LENGTH       1024
-#define DIC_HTMLLINE_MAX_LENGTH        512       /*used in reading of static html files by CGIs*/
+#define DIC_FILE_PATH_MAX_LENGTH       512
+#define DIC_TEXT_PARAGRAPH_MAX_LENGTH  2048
+#define DIC_HTMLLINE_MAX_LENGTH        1024      /*used in reading of static html files by CGIs*/
 #define DIC_SALT_MAX_LENGTH            16        /*salt used in Sha and Md5 algorithms*/
 #define DIC_EMAIL_BODY_MAX_LENGTH      4095
                                        /*userId(unsigned long long):nickname:hash:profile:username:email\n*/

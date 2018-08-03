@@ -17,20 +17,20 @@ char *dicUserProfileStrings [dicLanguagesAmount][dicUserProfilesAmountMoreOne - 
    {
       "administrator",
       "teacher",
-      "teacher_administrator",
+      "administrator_teacher",
       "student",
-      "student_administrator",
-      "student_teacher",
-      "student_teacher_administrator"
+      "administrator_student",
+      "teacher_student",
+      "administrator_teacher_student"
    },
    {
       "administrador",
       "professor",
-      "professor_administrador",
+      "administrador_professor",
       "estudente",
-      "estudente_administrador",
-      "estudente_professor",
-      "estudente_professor_administrador"
+      "adminstrador_estudante",
+      "professor_estudante",
+      "adminstrador_professor_estudante"
    }
 };
 
