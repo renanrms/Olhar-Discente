@@ -18,12 +18,22 @@ LFLAGS = -Wall -ansi
 DIC_ROOT = /users/renan.passos/private/EEL270/2016-1/DIC
 DIC_WEB_ROOT = /users/renan.passos/public/html/DIC
 
+#Libraries
+LIBMLCGI = -L./Libraries -lmlcgi
+LIBSENDMAIL = -L./Libraries -lsendmail
+LIBCRYPT = -lcrypt
+
+#Suport file. Convert HTML to printf in C.
 DIC_HTMLTOC_OBJS = dicHtmlToC.o
+#CLI file
+DIC_OBJS = dic.o dicFunctions.o dicErrors.o dicShowCliHelp.o dicAddUser.o dicAcceptInvite.o dicRequestRegistration.o dicUserInterface.o dicGetUsers.o 
+#CGIs
 DIC_MAIN_OBJS = dicCgiMain.o dicUserInterface.o dicFunctions.o 
 DIC_SHOWREQUESTREGISTRATIONFORM_OBJS = dicCgiShowRequestRegistrationForm.o dicUserInterface.o dicFunctions.o
 DIC_SHOWREQUESTPASSWORDRESETFORM_OBJS = dicCgiShowRequestPasswordResetForm.o dicUserInterface.o dicFunctions.o
 DIC_SHOWWEBHELP_OBJS = dicCgiShowWebHelp.o dicUserInterface.o dicFunctions.o dicErrors.o
 DIC_SHOWLICENSE_OBJS = dicCgiShowLicense.o dicUserInterface.o dicFunctions.o dicErrors.o
+
 
 HTMLTOC = dicHtmlToC
 
@@ -33,8 +43,12 @@ CGIS = dicMain.cgi\
        dicShowWebHelp.cgi\
        dicShowLicense.cgi
 
+CLI = dic
+
+
 EXECS = $(HTMLTOC)\
-        $(CGIS)
+        $(CGIS)\
+        $(CLI)
 
 .c.o:
 	$(CC) $(CFLAGS) -c $<
@@ -49,20 +63,22 @@ dicHtmlToC: $(DIC_HTMLTOC_OBJS)
 	$(LD) $(LFLAGS) -o $@ $(DIC_HTMLTOC_OBJS)
 
 dicMain.cgi: $(DIC_MAIN_OBJS)
-	$(LD) $(LFLAGS) -o $@ $(DIC_MAIN_OBJS) -L./Libraries -lmlcgi
+	$(LD) $(LFLAGS) -o $@ $(DIC_MAIN_OBJS) $(LIBMLCGI)
 
 dicShowRequestRegistrationForm.cgi: $(DIC_SHOWREQUESTREGISTRATIONFORM_OBJS)
-	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWREQUESTREGISTRATIONFORM_OBJS) -L./Libraries -lmlcgi
+	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWREQUESTREGISTRATIONFORM_OBJS) $(LIBMLCGI)
 
 dicShowRequestPasswordResetForm.cgi: $(DIC_SHOWREQUESTPASSWORDRESETFORM_OBJS)
-	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWREQUESTPASSWORDRESETFORM_OBJS) -L./Libraries -lmlcgi
+	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWREQUESTPASSWORDRESETFORM_OBJS) $(LIBMLCGI)
 
 dicShowWebHelp.cgi: $(DIC_SHOWWEBHELP_OBJS)
-	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWWEBHELP_OBJS) -L./Libraries -lmlcgi
+	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWWEBHELP_OBJS) $(LIBMLCGI)
 
 dicShowLicense.cgi: $(DIC_SHOWLICENSE_OBJS)
-	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWLICENSE_OBJS) -L./Libraries -lmlcgi
+	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWLICENSE_OBJS) $(LIBMLCGI)
 
+dic: $(DIC_OBJS)
+	$(LD) $(LFLAGS) -o $@ $(DIC_OBJS) $(LIBMLCGI) $(LIBSENDMAIL) $(LIBCRYPT)
 
 install:
 	make uninstall
@@ -86,6 +102,8 @@ install:
 	cp $(DIC_ROOT)/Sources/HTML/dicLicense_pt-br.html $(DIC_WEB_ROOT)/HTML/dicLicense_pt-br.html
 	cp $(DIC_ROOT)/Sources/HTML/index_en-us.html $(DIC_WEB_ROOT)/HTML/index_en-us.html
 	cp $(DIC_ROOT)/Sources/HTML/index_pt-br.html $(DIC_WEB_ROOT)/HTML/index_pt-br.html
+
+	cp $(DIC_ROOT)/Sources/C/dic $(DIC_ROOT)/Binaries/dic
 
 uninstall:
 	rm -rf $(DIC_ROOT)/Binaries

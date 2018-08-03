@@ -12,6 +12,28 @@
 #include "dicUserInterface.h"
 #include "dicTypes.h"
 
+char *dicUserProfileStrings [dicLanguagesAmount][dicUserProfilesAmountMoreOne - 1] =
+{
+   {
+      "administrator",
+      "teacher",
+      "teacher_administrator",
+      "student",
+      "student_administrator",
+      "student_teacher",
+      "student_teacher_administrator"
+   },
+   {
+      "administrador",
+      "professor",
+      "professor_administrador",
+      "estudente",
+      "estudente_administrador",
+      "estudente_professor",
+      "estudente_professor_administrador"
+   }
+}
+
 char *dicCliUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesAmount] =
 {
    {
@@ -162,6 +184,25 @@ char *dicWebUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
    }
 };
 
+/*
+ * char *
+ * DicGetUserProfileString (dicUserProfileType, dicLanguageType);
+ *
+ * Arguments:
+ * dicUserProfileType - profile
+ * dicLanguageType - language
+ *
+ * Returned values:
+ * char * - profile string
+ *
+ * Description:
+ * This function returns the string of the profile in a language.
+ */
+char *
+DicGetUserProfileString (dicUserProfileType dicUserProfile, dicLanguageType dicLanguage)
+{
+   return dicUserProfileStrings [dicLanguage][dicUserProfile - 1];
+}
 
 /* 
  * char *

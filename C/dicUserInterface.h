@@ -35,10 +35,30 @@ typedef enum
    dicHomeMessage,
    dicSendButtonMessage,
    dicForHelpMessage,
-   dicCreatedUser,
+   dicCreatedUserMessage,
+   dicCorrectAuthenticateMessage,
+   dicTempPasswordMessage,
+   dicSuccessMessage,
    dicUserInterfaceMessagesAmount
 } dicUserInterfaceMessageType;
 
+
+/*
+ * char *
+ * DicGetUserProfileString (dicUserProfileType, dicLanguageType);
+ *
+ * Arguments:
+ * dicUserProfileType - profile
+ * dicLanguageType - language
+ *
+ * Returned values:
+ * char * - profile string
+ *
+ * Description:
+ * This function returns the string of the profile in a language.
+ */
+char *
+DicGetUserProfileString (dicUserProfileType, dicLanguageType);
 
 /* 
  * char *

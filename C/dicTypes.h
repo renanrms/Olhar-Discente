@@ -22,13 +22,14 @@ typedef unsigned long long dicUserIdentifierType;
 
 typedef enum
 {
-	dicAdministrator=1,
+	dicAdministrator = 1,
 	dicTeacher,
 	dicTeacher_administrator,
 	dicStudent,
 	dicStudent_administrator,
 	dicStudent_teacher,
-	dicStudent_teacher_administrator
+	dicStudent_teacher_administrator,
+	dicUserProfilesAmountMoreOne,
 } dicUserProfileType;
 
 typedef struct dicUserData
@@ -38,8 +39,8 @@ typedef struct dicUserData
 	char nickname [DIC_NICKNAME_MAX_LENGTH + 1];
 	char password [DIC_PASSWORD_MAX_LENGTH + 1];
 	char passwordConfirmation [DIC_PASSWORD_MAX_LENGTH + 1];
-	char username [DIC_FULLNAME_MAX_LENGTH + 1];
-	char usernameConfirmation [DIC_FULLNAME_MAX_LENGTH + 1];
+	char username [DIC_USERNAME_MAX_LENGTH + 1];
+	char usernameConfirmation [DIC_USERNAME_MAX_LENGTH + 1];
 	char email [DIC_EMAIL_MAX_LENGTH + 1];
 	char emailConfirmation [DIC_EMAIL_MAX_LENGTH + 1];
 	struct dicUserData *next;
@@ -49,13 +50,14 @@ typedef struct dicUserData
 typedef enum
 {
 	dicLanguageArgument,
-	dicCurrentUserArgument,
+	dicCurrentUserNicknameArgument,
 	dicNicknameArgument,
 	dicUsernameArgument,
 	dicUsernameConfirmationArgument,
 	dicEmailArgument,
 	dicEmailConfirmationArgument,
-	dicProfileArgument
+	dicProfileArgument,
+	dicFriendEmailArgument
 } dicArgumentNameType;
 
 

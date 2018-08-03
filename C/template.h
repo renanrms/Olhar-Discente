@@ -12,6 +12,9 @@
 #ifndef DIC_<ARQUIVO>_H
 #define DIC_<ARQUIVO>_H "@(#)dic<Arquivo>.h $Revision$"
 
+#include "dicTypes.h"
+#include "dicErrors.h"
+
 /* Modelo de comentario para prototipo de funcao*/
 /* 
  * dicErrorType

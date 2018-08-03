@@ -12,6 +12,9 @@
 #ifndef DIC_CONFIG_H
 #define DIC_CONFIG_H "@(#)dicConfig.h $Revision$"
 
+#ifndef DIC_PRIMARY_ADMINISTRATOR_EMAIL
+#define DIC_PRIMARY_ADMINISTRATOR_EMAIL "renanpassos@poli.ufrj.br"
+#endif /* #ifndef DIC_PRIMARY_ADMINISTRATOR_EMAIL */
 
 #ifndef DIC_WEB_SERVER_URL
 #define DIC_WEB_SERVER_URL "http://www02.del.ufrj.br/~renan.passos/DIC/"
@@ -48,6 +51,19 @@
 #ifndef DIC_LOCKED_USERS_DATA_FILENAME
 #define DIC_LOCKED_USERS_DATA_FILENAME "locked_users"
 #endif /* #ifndef DIC_LOCKED_USERS_DATA_FILENAME */
+
+/*SEND EMAIL*/
+#ifndef DIC_SMTP_CLIENT_DOMAIN
+#define DIC_SMTP_CLIENT_DOMAIN "del.ufrj.br"
+#endif
+
+#ifndef DIC_SMTP_SERVER_FULL_HOSTNAME
+#define DIC_SMTP_SERVER_FULL_HOSTNAME "smtp.del.ufrj.br"
+#endif
+
+#ifndef DIC_SMTP_SERVER_PORT
+#define DIC_SMTP_SERVER_PORT 25
+#endif
 
 #endif /* #ifndef DIC_CONFIG_H */ 
 

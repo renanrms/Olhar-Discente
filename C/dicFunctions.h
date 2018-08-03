@@ -33,6 +33,23 @@ dicLanguageType
 DicGetLanguageIndex (const char*);
 
 /*
+ * dicUserProfileType
+ * DicGetUserProfileIndex (const char*);
+ *
+ * Arguments:
+ * const char* - string of profile in any implemented language (ex.: "administrator", "estudante"...)
+ *
+ * Returned values:
+ * dicUserProfileType - profile corresponding to string
+ *
+ * Description:
+ * This function returns the profile corresponding to string.
+ * dicUserProfilesAmount indicates invalid profile string.
+ */
+dicUserProfileType
+DicGetUserProfileIndex (const char*);
+
+/*
  * char*
  * DicGetAbsolutFileName (const char*, const char*);
  * 
@@ -84,10 +101,7 @@ DicCheckStringField (const char*, const char*,  size_t, size_t);
  *
  * Returned value:
  * dicOk - valid Nickname
- * dicOverPoint - more than one occurrence of point
- * dicNoPoint - no occurrence of point
- * dicInvalidCaracter - Nickname contains invalid caracter
- * dicInvalidLength - Nickname length is out of range
+ * dicInvalidNickname - more or less than one occourrence of point or invalid length or character
  * dicInvalidArgument - Nickname or valid caracters string is pointer to NULL
  *
  * Description:
@@ -108,10 +122,7 @@ DicCheckNickname (const char*, const char*,  size_t, size_t);
  *
  * Returned value:
  * dicOk - valid Email
- * dicOverArroba - more than one occurrence of arroba
- * dicNoArroba - no occurrence of arroba
- * dicInvalidCaracter - Email contains invalid caracter
- * dicInvalidLength - Email length is out of range
+ * dicInvalidEmail - more or less than one occourrence of point or invalid length or character
  * dicInvalidArgument - Email or valid caracters string is pointer to NULL
  *
  * Description:

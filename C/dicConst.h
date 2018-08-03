@@ -12,8 +12,9 @@
 #ifndef DIC_CONST_H
 #define DIC_CONST_H "@(#)dicConst.h $Revision$"
 
+#include "dicTypes.h"
+
 #define DIC_EOS                        '\0'
-#define DIC_SECONDS_PER_DAY            86400 
 
 #define DIC_BACKGROUND_COLOR           0xE0FFE0
 #define DIC_CENTRAL_FRAME_COLOR        0xD0D0FF
@@ -23,6 +24,8 @@
 /*for invited users*/
 #define DIC_TEMP_PASSWORD_CHARACTERS   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 #define DIC_TEMP_PASSWORD_LENGTH       16
+
+#define DIC_PROFILE_MAX_LENGTH         65
 
 #define DIC_NICKNAME_MIN_LENGTH        5
 #define DIC_NICKNAME_MAX_LENGTH        65
@@ -45,9 +48,11 @@
 #define DIC_HTMLLINE_MAX_LENGTH        512       /*used in reading of static html files by CGIs*/
 #define DIC_SALT_MAX_LENGTH            16        /*salt used in Sha and Md5 algorithms*/
 #define DIC_EMAIL_BODY_MAX_LENGTH      4095
-#define DIC_HASH_MAX_LENGTH            127       /*encoded password*/
                                        /*userId(unsigned long long):nickname:hash:profile:username:email\n*/
-#define DIC_USERSFILE_LINE_MAX_LENGTH  6 + 29 + DIC_NICKNAME_MAX_LENGTH + DIC_HASH_MAX_LENGTH + 1 + DIC_USERNAME_MAX_LENGTH + DIC_EMAIL_MAX_LENGTH
+#define DIC_USERSFILE_LINE_MAX_LENGTH  6 + 29 + DIC_NICKNAME_MAX_LENGTH + DIC_PASSWORD_MAX_LENGTH + 1 + DIC_USERNAME_MAX_LENGTH + DIC_EMAIL_MAX_LENGTH
+
+#define DIC_INVITE_EXPIRATION_TIME     3*(24*60*60)
+#define DIC_REQUESTING_EXPIRATION_TIME 7*(24*60*60)
 
 #endif
 /*$RCSfile$*/

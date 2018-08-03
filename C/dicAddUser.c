@@ -23,17 +23,43 @@
 #include "dicFunctions.h"
 #include "Libraries/sendmail.h"
 
+/*
+ * dicErrorType
+ * DicAddUser (dicUserDataType*);
+ *
+ * Arguments:
+ * dicUserDataType - structure containing username, password (empty or not) and confirmation, email and profile (I)
+ *
+ * Returned values:
+ * dicOk - user was added successfully
+ * dicInvalidArgument - one of the received arguments is NULL pointer
+ * dicInvalidNickname - nickname is invalid
+ * dicInvalidEmail - email is invalid
+ * dicInvalidEmailConfirmation - email confirmation differs from email
+ * dicUserEmailAlreadyRegistered - email is already registered
+ * dicInvalidPassword - invalid password
+ * dicInvalidPasswordConfirmation - password confirmation differs from password
+ * dicInvalidUsername - username is invalid
+ * dicIcorrectPassword - user authentication failed
+ * dicEmptyLastName - username has only one name
+ * dicOverLengthNames - very large names to create nickname
+ *
+ * Description:
+ * This function verifys the validity of data, creates an nickname and
+ * if it's the first user, register as administrator, 
+ * else register with profile received and send an email to user.
+ * If password is empty, an invite is send by email. 
+ */
 dicErrorType
 DicAddUser (dicUserDataType *dicUserData)
 {
 	FILE *dicUsersFile;
 	FILE *dicInvitedUsersFile;
 
-	char dicFirstName [DIC_NICKNAME_MAX_LENGTH + 1];
+	char dicFirstName [DIC_USERNAME_MAX_LENGTH + 1];
 	char dicFirstNickname [DIC_NICKNAME_MAX_LENGTH + 1];
 	char dicSecondNickname [DIC_NICKNAME_MAX_LENGTH + 1];
 	char dicEncodedPassword [DIC_PASSWORD_MAX_LENGTH + 1];
-	char dicPrimaryAdminEmail [DIC_EMAIL_MAX_LENGTH + 1];
 
 	char dicEmailBody [DIC_EMAIL_BODY_MAX_LENGTH + 1];
 
@@ -57,7 +83,7 @@ DicAddUser (dicUserDataType *dicUserData)
 	{
 		dicReturnCode = DicCheckStringField (dicUserData->password, DIC_PASSWORD_CARACTERS, DIC_PASSWORD_MIN_LENGTH, DIC_PASSWORD_MAX_LENGTH);
 		if (dicReturnCode != dicOk)
-			return dicReturnCode;
+			return dicInvalidPassword;
 	}
 	if(strcmp (dicUserData->password, dicUserData->passwordConfirmation))
 		return dicInvalidPasswordConfirmation;
@@ -65,7 +91,7 @@ DicAddUser (dicUserDataType *dicUserData)
 	/*Check username*/
 	dicReturnCode = DicCheckStringField (dicUserData->username, DIC_USERNAME_CARACTERS, DIC_USERNAME_MIN_LENGTH, DIC_USERNAME_MAX_LENGTH);
 	if(dicReturnCode != dicOk)
-		return dicReturnCode;
+		return dicInvalidUsername;
 
 	/*Create nickname*/
 	dicReturnCode = DicCreateNickname (dicUserData->username, dicFirstNickname, dicSecondNickname);
@@ -88,7 +114,7 @@ DicAddUser (dicUserDataType *dicUserData)
 		/*userId:nickname:password:profile:username:email\n*/
 		fprintf (dicUsersFile, "%llu:%s:%s:%i:%s:%s\n", 
 			     dicUserData->userId,
-		        dicUserData->nickname,
+		         dicUserData->nickname,
 			     dicEncodedPassword,
 			     dicUserData->profile,
 			     dicUserData->username,
@@ -98,7 +124,8 @@ DicAddUser (dicUserDataType *dicUserData)
 	}
 	else /*If the file exists the function should verify if will creat or invite a new user*/
 	{
-		dicFirstName = strtok (dicUserData->username, " ");
+		strcpy (dicFirstName, dicUser->username);
+		strtok (dicFirstName, " ");
 
 		/*open users data file*/
 		dicUsersFile = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_USERS_DATA_FILENAME), "a");
@@ -107,8 +134,6 @@ DicAddUser (dicUserDataType *dicUserData)
 		dicReturnCode = DicGetUsers (&dicRegisteredUser);		
 		if(dicReturnCode != dicOk)
 			return dicReturnCode;
-
-		strcpy (dicPrimaryAdminEmail, dicRegisteredUser->email);
 
 		/*Check nickname and email in file*/		
 		while(dicRegisteredUser != NULL)
@@ -126,9 +151,6 @@ DicAddUser (dicUserDataType *dicUserData)
 		}
 
 		dicUserData->userId++;
-
-		/*free the linked list*/	
-		DicFreeUsersLinkedList (dicRegisteredUser);
 
 		if(strlen (dicUserData->password) != 0) /*if no empty password creates a new user*/
 		{
@@ -170,7 +192,7 @@ DicAddUser (dicUserDataType *dicUserData)
 				DIC_SMTP_CLIENT_DOMAIN,
 				DIC_SMTP_SERVER_FULL_HOSTNAME,
 				DIC_SMTP_SERVER_PORT,
-				dicPrimaryAdminEmail, /*From Admin*/
+				DIC_PRIMARY_ADMINISTRATOR_EMAIL, /*From Admin*/
 				dicUserData->email, /*To*/
 				NULL, /*cc*/
 				NULL, /*bcc*/
@@ -189,22 +211,22 @@ DicAddUser (dicUserDataType *dicUserData)
 
 			/*userId:nickname::profile:username:email\n*/
 			fprintf (dicUsersFile, "%llu:%s::%i:%s:%s\n", 
-						dicUserData->userId,
-		   				dicUserData->nickname,
-						dicUserData->profile,
-						dicUserData->username,
-						dicUserData->email);
+			         dicUserData->userId,
+			         dicUserData->nickname,
+			         dicUserData->profile,
+			         dicUserData->username,
+			         dicUserData->email);
 
 			fclose (dicUsersFile);
 
 			/*open invited users file*/
 			dicInvitedUsersFile = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_INVITED_USERS_DATA_FILENAME), "a");
 
-			dicAbsoluteValidityTime = time (NULL) + 3*DIC_SECONDS_PER_DAY;
+			dicAbsoluteValidityTime = time (NULL) + DIC_INVITE_EXPIRATION_TIME;
 			/*<validity><userId><encoded password>*/
-			fwrite (&(dicAbsoluteValidityTime), sizeof (size_t), 1, dicInvitedUsersFile);
+			fwrite (&(dicAbsoluteValidityTime), sizeof (time_t), 1, dicInvitedUsersFile);
 			fwrite (&(dicUserData->userId), sizeof (dicUserIdentifierType), 1, dicInvitedUsersFile);
-			fwrite (&(dicEncodedPassword), sizeof (dicEncodedPassword), 1, dicInvitedUsersFile);
+			fwrite (dicEncodedPassword, sizeof (char), DIC_PASSWORD_MAX_LENGTH, dicInvitedUsersFile);
 
 			fclose (dicInvitedUsersFile);
 
@@ -243,7 +265,7 @@ DicAddUser (dicUserDataType *dicUserData)
 				DIC_SMTP_CLIENT_DOMAIN,
 				DIC_SMTP_SERVER_FULL_HOSTNAME,
 				DIC_SMTP_SERVER_PORT,
-				dicPrimaryAdminEmail, /*From Admin*/
+				DIC_PRIMARY_ADMINISTRATOR_EMAIL, /*From Admin*/
 				dicUserData->email, /*To*/
 				NULL, /*cc*/
 				NULL, /*bcc*/

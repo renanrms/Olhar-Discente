@@ -9,10 +9,13 @@
  * $Log$
  */
 
+#include <stdlib.h>
 #include <string.h>
 
+#include "dicUserInterface.h"
 #include "dicFunctions.h"
 #include "dicErrors.h"
+#include "dicConfig.h"
 #include "dicConst.h"
 #include "dicTypes.h"
 
@@ -37,6 +40,41 @@ DicGetLanguageIndex (const char *dicLanguageString)
       return dicPortuguese;
    else
       return dicEnglish;
+}
+
+/*
+ * dicUserProfileType
+ * DicGetUserProfileIndex (const char*);
+ *
+ * Arguments:
+ * const char* - string of profile in any implemented language (ex.: "administrator", "estudante"...)
+ *
+ * Returned values:
+ * dicUserProfileType - profile corresponding to string
+ *
+ * Description:
+ * This function returns the profile corresponding to string.
+ * dicUserProfilesAmountMoreOne indicates invalid profile string.
+ */
+dicUserProfileType
+DicGetUserProfileIndex (const char *dicProfileString)
+{
+   dicUserProfileType dicUserProfileIndex = 1;
+   dicLanguageType dicLanguage;
+
+   while (dicUserProfileIndex < dicUserProfilesAmountMoreOne)
+   {
+      dicLanguage = 0;
+      while (dicLanguage < dicLanguagesAmount)
+      {
+         if (!strcmp (dicProfileString, DicGetUserProfileString (, dicEnglish)) || !strcmp (dicProfileString, DicGetUserProfileString (, dicPortuguese)))
+            return dicUserProfileIndex;
+         dicLanguage++;
+      }
+      dicUserProfileIndex++;
+   }
+
+   return dicUserProfilesAmount;
 }
 
 /*
@@ -128,10 +166,7 @@ DicCheckStringField (const char* dicString, const char* dicValidCaracters,  size
  *
  * Returned value:
  * dicOk - valid Nickname
- * dicOverPoint - more than one occurrence of point
- * dicNoPoint - no occurrence of point
- * dicInvalidCaracter - Nickname contains invalid caracter
- * dicInvalidLength - Nickname length is out of range
+ * dicInvalidNickname - more or less than one occourrence of point or invalid length or character
  * dicInvalidArgument - Nickname or valid caracters string is pointer to NULL
  *
  * Description:
@@ -154,8 +189,6 @@ DicCheckNickname (const char* dicNickname, const char* dicValidCaracters,  size_
       if (dicNickname [dicNicknameIndex] == '.')
       {
          dicPointsCount++;
-         if (dicPointsCount > 1)
-            return dicOverPoint;
       }
       else
       {
@@ -165,7 +198,7 @@ DicCheckNickname (const char* dicNickname, const char* dicValidCaracters,  size_
                break;
 
             if (dicValidCaracters [dicValidCaractersIndex] == DIC_EOS)
-               return dicInvalidCaracter;
+               return dicInvalidNickname;
 
             dicValidCaractersIndex++;
          }
@@ -174,13 +207,13 @@ DicCheckNickname (const char* dicNickname, const char* dicValidCaracters,  size_
       dicNicknameIndex++;
    }
 
-   if (dicPointsCount < 1)
-      return dicNoPoint;
+   if (dicPointsCount != 1)
+      return dicInvalidNickname;
 
    if ((dicNicknameIndex >= dicMinimunLength) && (dicNicknameIndex <= dicMaximunLength))
       return dicOk;
    else 
-      return dicInvalidLength;
+      return dicInvalidNickname;
 }
 
 /*
@@ -195,10 +228,7 @@ DicCheckNickname (const char* dicNickname, const char* dicValidCaracters,  size_
  *
  * Returned value:
  * dicOk - valid Email
- * dicOverArroba - more than one occurrence of arroba
- * dicNoArroba - no occurrence of arroba
- * dicInvalidCaracter - Email contains invalid caracter
- * dicInvalidLength - Email length is out of range
+ * dicInvalidEmail - more or less than one occourrence of point or invalid length or character
  * dicInvalidArgument - Email or valid caracters string is pointer to NULL
  *
  * Description:
@@ -221,8 +251,6 @@ DicCheckEmail (const char* dicEmail, const char* dicValidCaracters,  size_t dicM
       if (dicEmail [dicEmailIndex] == '@')
       {
          dicArrobasCount++;
-         if (dicArrobasCount > 1)
-            return dicOverArroba;
       }
       else
       {
@@ -232,7 +260,7 @@ DicCheckEmail (const char* dicEmail, const char* dicValidCaracters,  size_t dicM
                break;
 
             if (dicValidCaracters [dicValidCaractersIndex] == DIC_EOS)
-               return dicInvalidCaracter;
+               return dicInvalidEmail;
 
             dicValidCaractersIndex++;
          }
@@ -241,13 +269,13 @@ DicCheckEmail (const char* dicEmail, const char* dicValidCaracters,  size_t dicM
       dicEmailIndex++;
    }
 
-   if (dicArrobasCount < 1)
-      return dicNoArroba;
+   if (dicArrobasCount != 1)
+      return dicInvalidEmail;
 
    if ((dicEmailIndex >= dicMinimunLength) && (dicEmailIndex <= dicMaximunLength))
       return dicOk;
    else 
-      return dicInvalidLength;
+      return dicInvalidEmail;
 }
 
 /*
@@ -314,6 +342,7 @@ DicCreateRandomString (const char *dicValidCaracters, size_t dicLength, char *di
 dicErrorType
 DicCreateNickname (const char *dicUsername, char *dicNickname1, char *dicNickname2)
 {
+   char dicUsernameCopy [DIC_USERNAME_MAX_LENGTH];
    char *dicFirstName;
    char *dicMidleName;
    char *dicLastName = NULL;
@@ -323,7 +352,9 @@ DicCreateNickname (const char *dicUsername, char *dicNickname1, char *dicNicknam
    if (dicUsername == NULL || dicNickname1 == NULL || dicNickname2 == NULL)
       return dicInvalidArgument;
 
-   dicFirstName = strtok (dicUsername, " ");
+   strcpy (dicUsernameCopy, dicUsername);
+
+   dicFirstName = strtok (dicUsernameCopy, " ");
 
    if (dicFirstName == NULL)
       return dicEmptyUsername;
@@ -533,6 +564,8 @@ dicErrorType
 DicGetUsers (dicUserDataType **dicFirstUser)
 {
    FILE *dicUsersFile;
+   char *validation;
+   char *dicTokenPointer;
    char dicUserLine [DIC_USERSFILE_LINE_MAX_LENGTH + 1];
    dicUserDataType *dicUser;
    dicUserDataType *dicPreviousUser = NULL;
@@ -553,10 +586,19 @@ DicGetUsers (dicUserDataType **dicFirstUser)
       if (dicPreviousUser != NULL)
          *dicFirstUser = dicUser;
 
-      strcpy (dicUser->userId, strtok (dicUserLine, ":"));
+      dicUser->userId = strtoul (strtok (dicUserLine, ":"), &validation, 10);
       strcpy (dicUser->nickname, strtok (NULL, ":"));
-      strcpy (dicUser->password, strtok (NULL, ":"));
-      strcpy (dicUser->profile, strtok (NULL, ":"));
+      dicTokenPointer = strtok (NULL, ":");
+      if (*(dicTokenPointer - 1) == ':')
+      {
+         dicUser->password[0] = DIC_EOS;
+         strcpy (dicUser->profile, dicTokenPointer);
+      }
+      else
+      {
+         strcpy (dicUser->password, dicTokenPointer);
+         dicUser->profile = strtoul (strtok (NULL, ":"), &validation, 10);
+      }
       strcpy (dicUser->username, strtok (NULL, ":"));
       strcpy (dicUser->email, strtok (NULL, "\n"));
 
@@ -569,6 +611,8 @@ DicGetUsers (dicUserDataType **dicFirstUser)
       dicUser++;
    }
    dicUser->next = NULL;
+
+   fclose (dicUsersFile);
 
    return dicOk;
 }
@@ -629,6 +673,5 @@ DicAuthenticateUser (dicUserDataType *dicUser)
    else
       return dicNicknameNotExist;
 }
-
 
 /*$RCSfile$*/
