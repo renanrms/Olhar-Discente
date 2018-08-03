@@ -36,13 +36,23 @@ typedef struct dicUserData
 	char nickname [DIC_NICKNAME_MAX_LENGTH + 1];
 	char password [DIC_PASSWORD_MAX_LENGTH + 1];
 	char passwordConfirmation [DIC_PASSWORD_MAX_LENGTH + 1];
-	char fullname [DIC_FULLNAME_MAX_LENGTH + 1];
-	char fullnameConfirmation [DIC_FULLNAME_MAX_LENGTH + 1];
+	char username [DIC_FULLNAME_MAX_LENGTH + 1];
+	char usernameConfirmation [DIC_FULLNAME_MAX_LENGTH + 1];
 	char email [DIC_EMAIL_MAX_LENGTH + 1];
 	char emailConfirmation [DIC_EMAIL_MAX_LENGTH + 1];
 	struct dicUserData *next;
 	struct dicUserData *previous; 
 } dicUserDataType;
+
+typedef enum
+{
+	dicLanguageArgument,
+	dicNicknameArgument,
+	dicUsernameArgument,
+	dicUsernameConfirmationArgument,
+	dicEmailArgument,
+	dicEmailConfirmationArgument
+} dicArgumentNameType;
 
 
 #endif 
