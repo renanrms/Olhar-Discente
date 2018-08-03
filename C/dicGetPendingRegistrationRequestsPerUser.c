@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "dicGetPendingRegistrationRequestsPerUser.h"
 #include "dicGetUsers.h"

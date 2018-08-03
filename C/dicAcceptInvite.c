@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "dicAcceptInvite.h"
 #include "dicFunctions.h"
@@ -61,6 +62,7 @@ DicAcceptInvite (char *dicPassword, dicUserDataType *dicInvitedUser)
 
 	dicUserDataType *dicUser;
 	dicUserIdentifierType dicUserId;
+	char *dicTokenPointer;
 	char dicFirstName [DIC_USERNAME_MAX_LENGTH + 1];
 	char dicEncodedPassword [DIC_PASSWORD_MAX_LENGTH + 1];
 	char dicEmailBody [DIC_EMAIL_BODY_MAX_LENGTH];
@@ -145,7 +147,7 @@ DicAcceptInvite (char *dicPassword, dicUserDataType *dicInvitedUser)
 				fclose (dicInvitedUsersFile_Temp);
 				remove (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, ".temporary_users"));
 				remove (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, ".temporary_invited.users"));
-				return dicLockedOrRequestingUser;
+				return dicNotInvitedUser;
 			}
 			else
 				break;
@@ -181,7 +183,7 @@ DicAcceptInvite (char *dicPassword, dicUserDataType *dicInvitedUser)
 					remove (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, ".temporary_invited.users"));
 					return dicInvalidPassword;
 				}
-				if(strcmp (dicUserData->password, dicUserData->passwordConfirmation))
+				if(strcmp (dicInvitedUser->password, dicInvitedUser->passwordConfirmation))
 				{
 					fclose (dicUsersFile);
 					fclose (dicUsersFile_Temp);
@@ -192,7 +194,7 @@ DicAcceptInvite (char *dicPassword, dicUserDataType *dicInvitedUser)
 					return dicInvalidPasswordConfirmation;
 				}
 				/*accept user. Encode new password*/
-				DicEncodePasswordWithSpecificAlgorithm (dicInvitedUser->password, Sha512, dicUser->password);
+				DicEncodePasswordWithSpecificAlgorithm (dicInvitedUser->password, dicSha512, dicUser->password);
 			}
 			else
 			{
@@ -202,14 +204,14 @@ DicAcceptInvite (char *dicPassword, dicUserDataType *dicInvitedUser)
 				fclose (dicInvitedUsersFile_Temp);
 				remove (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, ".temporary_users"));
 				remove (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, ".temporary_invited.users"));
-				return dicIcorrectPassword;
+				return dicIncorrectPassword;
 			}
 		}
 		else /*not is the user invited. Copy data for temporary file*/
 		{
 			fwrite (&(dicAbsoluteValidityTime), sizeof (time_t), 1, dicInvitedUsersFile_Temp);
 			fwrite (&(dicUserId), sizeof (dicUserIdentifierType), 1, dicInvitedUsersFile_Temp);
-			fwrite (dicEncodedPassword, sizeof (char), DIC_HASH_SHA512_LENGTH, dicInvitedUsersFile_Temp);
+			fwrite (dicEncodedPassword, sizeof (char), DIC_PASSWORD_MAX_LENGTH, dicInvitedUsersFile_Temp);
 		}
 	}
 
@@ -226,7 +228,7 @@ DicAcceptInvite (char *dicPassword, dicUserDataType *dicInvitedUser)
 	         dicUser->userId,
 	         dicUser->nickname,
 	         dicUser->password,
-	         dicUser->perfil,
+	         dicUser->profile,
 	         dicUser->username,
 	         dicUser->email);
 
@@ -248,7 +250,7 @@ DicAcceptInvite (char *dicPassword, dicUserDataType *dicInvitedUser)
 	strtok (dicFirstName, " ");
 
 	/*create message*/
-	sprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+	snprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
 	        "Welcome, ", dicFirstName, "!\n\n",
 	        "You was registered at Olhar Discente with success.\n\n\n",
 	        "You are reistered as ", dicUser->username, " and your login data are:\n\n",
