@@ -67,13 +67,10 @@ DicDisapproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequest
 	dicUserIdentifierType dicUserId2;
 	char dicUserNickname [DIC_NICKNAME_MAX_LENGTH];
 
-	char dicUserEmail [DIC_EMAIL_MAX_LENGTH]
 	char dicFirstName [DIC_USERNAME_MAX_LENGTH + 1];
 	char dicEncodedPassword [DIC_PASSWORD_MAX_LENGTH + 1];
 	char dicEmailBody [DIC_EMAIL_BODY_MAX_LENGTH];
 	time_t dicAbsoluteValidityTime;
-
-	dicErrorType dicReturnCode;
 
 
 	if (dicResponsibleNickname == NULL || dicRequestingNickname == NULL)
@@ -84,7 +81,7 @@ DicDisapproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequest
 	dicUsersFile = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_USERS_DATA_FILENAME), "r");
 	dicUsersFile_Temp = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, ".temporary_users"), "w");
 
-	dicRequesting->nickname = dicRequestingNickname;
+	strcpy (dicRequesting->nickname, dicRequestingNickname);
 
 	/*obtain data of invited user*/
 	while (fgets (dicUsersFileLine, DIC_USERSFILE_LINE_MAX_LENGTH + 1, dicUsersFile) != NULL)
@@ -198,7 +195,7 @@ DicDisapproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequest
 			fwrite (&(dicAbsoluteValidityTime), sizeof (time_t), 1, dicRequestingUsersFile_Temp);
 			fwrite (&(dicUserId1), sizeof (dicUserIdentifierType), 1, dicRequestingUsersFile_Temp);
 			fwrite (&(dicUserId2), sizeof (dicUserIdentifierType), 1, dicRequestingUsersFile_Temp);
-			fwrite (dicEncodedPassword, sizeof (char), DIC_HASH_SHA512_LENGTH, dicRequestingUsersFile_Temp);
+			fwrite (dicEncodedPassword, sizeof (char), DIC_PASSWORD_MAX_LENGTH, dicRequestingUsersFile_Temp);
 		}
 
 		/*<validity><userId><encoded password>*/
@@ -244,7 +241,7 @@ DicDisapproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequest
 	        DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_USERS_DATA_FILENAME));
 
 	/*create message*/
-	sprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+	snprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
 	        "Hi, ", dicFirstName, "!\n\n",
 	        "You rejected the invite at Olhar Discente with success and your all data are deleted.\n\n\n\n",
 	        "If want to know the site access: ", DIC_WEB_SERVER_URL, "CGIs/dicMain.cgi?dicLanguage=dicEnglish\n",

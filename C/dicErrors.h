@@ -49,6 +49,8 @@ typedef enum
 	dicNicknameNotExist,
 	dicUserAlreadyRegistered,
 	dicNotInvitedUser,
+	dicNotRequestingUser,
+	dicNotResponsibleUser,
 	dicNotPermitedProfileRequest,
 	dicErrorCodesAmount
 } dicErrorType;

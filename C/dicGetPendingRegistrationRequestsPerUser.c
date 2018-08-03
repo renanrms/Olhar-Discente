@@ -117,7 +117,7 @@ DicGetPendingRegistrationRequestsPerUser (char *dicResponsibleNickname, dicUserD
 			else
 			{
 				dicRequestingUser = malloc (sizeof (dicUserDataType));
-				dicRequestingUser->previous = NULL;dicFilePathdicFilePath
+				dicRequestingUser->previous = NULL;
 			}
 
 			dicRequestingUser->userId = dicUserId1;
