@@ -12,12 +12,15 @@
  *
  */
 
+#define _XOPEN_SOURCE 500
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <strings.h> /*for index() and rindex()*/
 #include <getopt.h>
-#include <sys/types.h>
+#include <sys/types.h> /*for getuid()*/
 #include <pwd.h>
 
 #include "dicAddUser.h"
@@ -42,8 +45,10 @@
 int
 main (int argc, char **argv)
 {
-	char dicProfileString [DIC_PROFILE_MAX_LENGTH];
-	char dicFriendEmail [DIC_EMAIL_MAX_LENGTH];
+	char dicArgumentString [DIC_CLI_ARGUMENT_MAX_LENGTH + 1];
+	char *dicEqualityOcourrance;
+	char dicProfileString [DIC_PROFILE_MAX_LENGTH + 1];
+	char dicFriendEmail [DIC_EMAIL_MAX_LENGTH + 1];
 	dicUserDataType *dicUserData;
 	dicUserDataType *dicCurrentUser;
 	dicNicknameListType *dicNicknames;
@@ -118,6 +123,7 @@ main (int argc, char **argv)
 	dicProfileString[0]                     = DIC_EOS;
 	dicFriendEmail[0]                       = DIC_EOS;
 
+
 	while ((dicShortOption = getopt_long (argc, argv, dicShortOptions, dicLongOptions, &dicLongOptionIndex)) != -1) /*Is -1 when argument list is exhausted*/
 	{
 		switch (dicShortOption)
@@ -143,9 +149,42 @@ main (int argc, char **argv)
 				break;
 				
 			case 'C':  /*initial configure*/
-			
+
 				while (optind < argc)
 				{
+
+					strcpy (dicArgumentString, argv [optind]);
+
+					/*while the string argument has not an equality and a value, concatenate more one element of argv*/
+					while ((optind + 1 < argc)
+					   &&  ((index (dicArgumentString, '=') == NULL) || ((index (dicArgumentString, '=') + 1)* == DIC_EOS)))
+					{
+						optind++;
+						strcat (dicArgumentString, argv [optind]);
+					}
+
+					/*while the next argument has a name before your equality or there are't a next equality symbol*/
+					while ((optind + 1 < argc)
+					    && (index (argv [optind + 1], '=') == NULL)
+					    && (!(optind + 2 < argc) || (index (argv [optind + 2], '=') != argv [optind + 2])))
+					{
+						optind++;
+						strcat (dicArgumentString, " ");
+						strcat (dicArgumentString, argv [optind]);
+					}
+
+					dicEqualityOcourrance = index (dicArgumentString, '=');
+
+					/*if the equality symbol is in begin or end of argument or there are more than one equality symbols*/
+					if ((dicEqualityOcourrance < dicArgumentString)
+					|| ((dicEqualityOcourrance + 1)* == DIC_EOS)
+					||  (dicEqualityOcourrance != rindex (dicArgumentString, '=')))
+					{
+						printf ("%s\n", DicGetCliErrorMessage (dicNotBalancedArguments, dicLanguage));
+						printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
+						exit (dicNotBalancedArguments);
+					}
+
 					switch (getsubopt (&(argv [optind]), dicArgumentsNames, &dicArgumentValue))
 					{
 						case dicLanguageArgument:
@@ -184,7 +223,7 @@ main (int argc, char **argv)
 					{
 						strcpy (dicUserData->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
 						strcpy (dicUserData->passwordConfirmation, getpass (DicGetCliUserInterfaceMessage (dicPasswordConfirmationMessage, dicLanguage)));
-						
+
 						dicUserData->userId = 0;
 						dicUserData->profile = 0;
 						dicUserData->nickname[0] = DIC_EOS; 
@@ -192,13 +231,11 @@ main (int argc, char **argv)
 						dicUserData->previous = NULL;
 
 						dicReturnCode = DicAddUser (dicUserData);
-
 						printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 						if (dicReturnCode != dicOk)
 						{
 							exit (dicReturnCode);
 						}
-						return dicOk;
 					}
 					else
 					{
@@ -213,6 +250,7 @@ main (int argc, char **argv)
 					printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
 					exit (dicHasRequiredArguments);
 				}
+
 				break;
 
 			case 'N':
@@ -998,7 +1036,7 @@ main (int argc, char **argv)
 				break;
 
 			default:
-				printf ("%s: %s\n", DicGetCliErrorMessage (dicInvalidOption, dicLanguage), argv [optind]);
+				printf ("%s: %s\n", DicGetCliErrorMessage (dicInvalidOption, dicLanguage), argv [optind-1]);
 				printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
 				exit (dicInvalidOption);
 
@@ -1007,8 +1045,10 @@ main (int argc, char **argv)
 		return dicOk;
 	}
 
-	printf ("%s: %s\n", DicGetCliErrorMessage (dicNoOptionEntered, dicLanguage), argv [optind]);
-	printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
+	printf ("%s\n", DicGetCliErrorMessage (dicNoOptionEntered, dicEnglish));
+	printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicEnglish), argv[0]);
+	printf ("%s\n", DicGetCliErrorMessage (dicNoOptionEntered, dicPortuguese));
+	printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicPortuguese), argv[0]);
 	exit (dicNoOptionEntered);
 
 }

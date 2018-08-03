@@ -46,9 +46,9 @@ char *dicCliUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
       NULL,
       /*Web and Ncurses fields*/
       NULL,
-      NULL,
-      NULL,
-      NULL,
+      "Password: ",
+      "Password confirmation: ",
+      "Temporary password: ",
       NULL,
       NULL,
       NULL,
@@ -65,7 +65,6 @@ char *dicCliUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
       NULL,
       NULL,
       /*Event and notification massages*/
-      "Operation was successful",
       "For Help",
       "Successfully authenticated user"
    },
@@ -74,9 +73,9 @@ char *dicCliUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
       NULL,
       /*Web and Ncurses fields*/
       NULL,
-      NULL,
-      NULL,
-      NULL,
+      "Senha: ",
+      "Confirmação de senha: ",
+      "Senha temporária: ",
       NULL,
       NULL,
       NULL,
@@ -93,7 +92,6 @@ char *dicCliUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
       NULL,
       NULL,
       /*Event and notification massages*/
-      "Operação realizada com sucesso",
       "Para ver a ajuda",
       "Usuário autenticado com sucesso"
    }
@@ -125,7 +123,6 @@ char *dicNcursesUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessa
       "Send",
       "Register",
       /*Event and notification massages*/
-      "Operation was successful",
       "For Help",
       "Successfully authenticated user"
    },
@@ -133,7 +130,7 @@ char *dicNcursesUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessa
       "Englês",
       "Português",
       /*Web and Ncurses fields*/
-      "Usu&aacuterio",
+      "Usuário",
       "Senha",
       "Confirmação de senha",
       "Senha temporária",
@@ -153,7 +150,6 @@ char *dicNcursesUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessa
       "Enviar",
       "Cadastrar",
       /*Event and notification massages*/
-      "Operação realizada com sucesso",
       "Para ver a ajuda",
       "Usuário autenticado com sucesso"
    }
@@ -185,7 +181,6 @@ char *dicWebUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
       "Send",
       "Register",
       /*Event and notification massages*/
-      "Operation was successful",
       "For Help",
       "Successfully authenticated user"
    },
@@ -213,7 +208,6 @@ char *dicWebUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
       "Enviar",
       "Cadastrar",
       /*Event and notification massages*/
-      "Opera&ccedil&atildeo realizada com sucesso",
       "Para ver a ajuda",
       "Usu&aacuterio autenticado com sucesso"
    }

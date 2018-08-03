@@ -72,13 +72,6 @@ DicAddUser (dicUserDataType *dicUserData)
 
 	dicUserDataType *dicRegisteredUser;
 		
-	/*Check email*/
-	dicReturnCode = DicCheckEmail (dicUserData->email, DIC_EMAIL_CARACTERS, DIC_EMAIL_MIN_LENGTH, DIC_EMAIL_MAX_LENGTH);
-	if(dicReturnCode != dicOk)
-		return dicReturnCode;
-	if(strcmp (dicUserData->email, dicUserData->emailConfirmation) != 0)
-		return dicInvalidEmailConfirmation;	
-
 	/*Check password*/
 	if (strlen (dicUserData->password) != 0)
 	{
@@ -100,6 +93,13 @@ DicAddUser (dicUserDataType *dicUserData)
 	dicReturnCode = DicCreateNickname (dicUserData->username, dicFirstNickname, dicSecondNickname);
 	if(dicReturnCode != dicOk)
 		return dicReturnCode;
+
+	/*Check email*/
+	dicReturnCode = DicCheckEmail (dicUserData->email, DIC_EMAIL_CARACTERS, DIC_EMAIL_MIN_LENGTH, DIC_EMAIL_MAX_LENGTH);
+	if(dicReturnCode != dicOk)
+		return dicReturnCode;
+	if(strcmp (dicUserData->email, dicUserData->emailConfirmation) != 0)
+		return dicInvalidEmailConfirmation;	
 
 	dicUsersFile = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_USERS_DATA_FILENAME), "r");
 

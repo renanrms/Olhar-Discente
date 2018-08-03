@@ -1,62 +1,86 @@
 Para utilizar qualquer funcionalidade:
+
 ./dic -OpçãoCurta argumento1=valor argumento2=valor ...
 ou
 ./dic --OpçãoLonga argumento1=valor argumento2=valor ...
 
-	Nas opções que se seguem, o que está entre colchetes são argumentos opcionais. Os argumentos são dados por um par nome-valor separados por um sinal de igual. Os valores que estão dentro dos sinais de maior e menor são valores dados pelo usuário, enquanto que os valores que estão fora são valores fixos. A / separa os argumentos que são equivalentes entre si e o | separa os diferentes valores possíveis de um mesmo nome.
+
+	Nas opções que se seguem, o que está entre colchetes são argumentos opcionais. Os argumentos são dados por um par nome-valor separados por um sinal de igual e espaços (opcionais). Os valores que estão dentro dos sinais de maior e menor são valores dados pelo usuário, enquanto que os valores que estão fora são valores fixos. A / separa os argumentos que são equivalentes entre si e o | separa os diferentes valores possíveis de um mesmo nome.
 
 	O argumento 'perfil' deve ser escrito da seguinte forma:
-	perfil= administrador | professor | administrador_professor | estudante | adminstrador_estudante | professor_estudante | adminstrador_professor_estudante
+	profile= administrador | professor | administrador_professor | estudante | adminstrador_estudante | professor_estudante | adminstrador_professor_estudante
 
-	Nos casos em que for específicado haverá restrições para os valores de perfil.
+	Nos casos em que for específicado haverá restrições para os valores do argumento 'perfil'.
 
-Exibir ajuda: -h / --help [language=english | portuguese]
+Exibir ajuda:
+-h / --help [language=english | portuguese]
 
-Executar a interface Ncurses: -N / --Ncurses [nickname=<apelido>] [language=english | portuguese]
+Executar a interface Ncurses:
+-N / --Ncurses [nickname=<apelido>] [language=english | portuguese]
 
-Criar a configuração inicial do sistema: -C / --Configure  username=<nome completo> confirm-username=<nome completo> email=<endereço eletrônico> confirm-email=<endereço eletrônico> [language=english | portuguese]
+Criar a configuração inicial do sistema:
+-C / --Configure username=<nome completo> confirm-username=<nome completo> email=<endereço eletrônico> confirm-email=<endereço eletrônico> [language=english | portuguese]
 
-Adicionar um usuário ao sistema: -a / --add  user=<apelido> username=<nome completo> confirm-username=<nome completo> email=<endereço eletrônico> confirm-email=<endereço eletrônico> profile=<perfil> [language=english | portuguese]
+Adicionar um usuário ao sistema:
+-a / --add user=<apelido> username=<nome completo> confirm-username=<nome completo> email=<endereço eletrônico> confirm-email=<endereço eletrônico> profile=<perfil> [language=english | portuguese]
 
-Convidar um usuário para participar do sistema: -i / --invite user=<apelido> username=<nome completo> confirm-username=<nome completo> email=<endereço eletrônico> confirm-email=<endereço eletrônico> profile=<perfil> [language=english | portuguese]
+Convidar um usuário para participar do sistema:
+-i / --invite user=<apelido> username=<nome completo> confirm-username=<nome completo> email=<endereço eletrônico> confirm-email=<endereço eletrônico> profile=<perfil> [language=english | portuguese]
 
-	Usuários do grupo estudante só podem convidar outros usuários para o grupo estudantes; professores podem usuários para os grupos estudante e/ou professor, e administradores podem convidar outros usuários para qualquer grupo.
+	Usuários do grupo estudante só podem convidar outros usuários para o grupo estudantes; professores podem convidar usuários para os grupos estudante e/ou professor, e administradores podem convidar outros usuários para qualquer grupo.
 
-Aceitar um convite para participar do sistema: -t / --accept user=<apelido> [language=english | portuguese]
+Aceitar um convite para participar do sistema:
+-t / --accept user=<apelido> [language=english | portuguese]
 
-Rejeitar um convite para participar do sistema: -j / --reject user=<apelido> [language=english | portuguese]
+Rejeitar um convite para participar do sistema:
+-j / --reject user=<apelido> [language=english | portuguese]
 
-Solicitar cadastramento no sistema: -n / --new username=<nome completo> confirm-username=<nome completo> email=<endereço eletrônico> confirm-email=<endereço eletrônico> friend-email=<endereço eletrônico> [language=english | portuguese]
+Solicitar cadastramento no sistema:
+-n / --new username=<nome completo> confirm-username=<nome completo> email=<endereço eletrônico> confirm-email=<endereço eletrônico> friend-email=<endereço eletrônico> [language=english | portuguese]
 
 	Só é possível solicitar cadastramento no sistema como estudante e/ou professor.
 
-Obter a lista de solicitações de cadastramento no sistema sob responsabilidade deste usuário: -q / --request user=<apelido> [language=english | portuguese]
+Obter a lista de solicitações de cadastramento no sistema sob responsabilidade deste usuário:
+-q / --request user=<apelido> [language=english | portuguese]
 
-Obter a lista com todas as solicitações de cadastramento no sistema: -Q / --Request user=<apelido> [language=english | portuguese]
+Obter a lista com todas as solicitações de cadastramento no sistema:
+-Q / --Request user=<apelido> [language=english | portuguese]
 
-Aprovar um pedido de cadastramento no sistema: -v / --approve user=<apelido> nickname=<apelido> [language=english | portuguese]
+Aprovar um pedido de cadastramento no sistema:
+-v / --approve user=<apelido> nickname=<apelido> [language=english | portuguese]
 
-Reprovar um pedido de cadastramento no sistema: -d / --disapprove user=<apelido> nickname=<apelido> [language=english | portuguese]
+Reprovar um pedido de cadastramento no sistema:
+-d / --disapprove user=<apelido> nickname=<apelido> [language=english | portuguese]
 
-Obter a lista de solicitações de desbloqueio: -U / --Unlocking user=<apelido>  [language=english | portuguese]
+Obter a lista de solicitações de desbloqueio:
+-U / --Unlocking user=<apelido> [language=english | portuguese]
 
-Bloquear a conta de um usuário do sistema: -l / --lock user=<apelido> [nickname=<apelido>] [language=english | portuguese]
+Bloquear a conta de um usuário do sistema:
+-l / --lock user=<apelido> [nickname=<apelido>] [language=english | portuguese]
 
-Desbloquear a conta de um usuário do sistema: -u / --unlock user=<apelido> [nickname=<apelido>] [language=english | portuguese]
+Desbloquear a conta de um usuário do sistema:
+-u / --unlock user=<apelido> [nickname=<apelido>] [language=english | portuguese]
 
-Alterar a senha de um usuário do sistema: -p / --password  user=<apelido> [nickname=<apelido>] [language=english | portuguese]
+Alterar a senha de um usuário do sistema:
+-p / --password  user=<apelido> [nickname=<apelido>] [language=english | portuguese]
 
-Criar uma senha temporária para um usuário do sistema: -r / --reset user=<apelido> [nickname=<apelido>] [language=english | portuguese]
+Criar uma senha temporária para um usuário do sistema:
+-r / --reset user=<apelido> [nickname=<apelido>] [language=english | portuguese]
 
-Alterar o nome de um usuário do sistema: -m / --modify user=<apelido> [nickname=<apelido>] username=<nome completo> confirm-username=<nome completo> [language=english | portuguese]
+Alterar o nome de um usuário do sistema:
+-m / --modify user=<apelido> [nickname=<apelido>] username=<nome completo> confirm-username=<nome completo> [language=english | portuguese]
 
-Alterar o endereço eletrônico de um usuário do sistema: -e / --edit user=<apelido> [nickname=<apelido>] email=<endereço eletrônico> confirm-email=<endereço eletrônico> [language=english | portuguese]
+Alterar o endereço eletrônico de um usuário do sistema:
+-e / --edit user=<apelido> [nickname=<apelido>] email=<endereço eletrônico> confirm-email=<endereço eletrônico> [language=english | portuguese]
 
-Confirmar a alteração do endereço eletrônico: -c / --confirm user=<apelido> key=<chave>  [language=english | portuguese]
+Confirmar a alteração do endereço eletrônico:
+-c / --confirm user=<apelido> key=<chave>  [language=english | portuguese]
 
-Alterar o perfil de um usuário: -g / --group user=<apelido> nickname=<apelido> profile=<perfil> [language=english | portuguese]
+Alterar o perfil de um usuário:
+-g / --group user=<apelido> nickname=<apelido> profile=<perfil> [language=english | portuguese]
 
-Obter todos os usuários: -s / --show [language=english | portuguese]
+Obter todos os usuários:
+-s / --show [language=english | portuguese]
 
-Buscar informações sobre usuários com certos filtros: -S / --Search [username=<nome completo ou parte do nome>] [email=<endereço eletrônico ou parte do endereço eletrônico>] [profile=<perfil> [language=english | portuguese]
-
+Buscar informações sobre usuários com certos filtros:
+-S / --Search [username=<nome completo ou parte do nome>] [email=<endereço eletrônico ou parte do endereço eletrônico>] [profile=<perfil> [language=english | portuguese]

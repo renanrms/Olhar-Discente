@@ -25,7 +25,6 @@ typedef enum
 	dicInvalidEmail,
 	dicInvalidEmailConfirmation,
 	dicInvalidUsername,
-/*	dicEmptyUsername,  */ /*this is included in invalid error message and will be deleted*/
 	dicEmptyLastName, /*this error exist to show other warning to user*/
 	dicOverLengthNames, /*this error exist to indicate an typing error and show other warning to user*/
 	dicInvalidUsernameConfirmation,
@@ -40,8 +39,9 @@ typedef enum
 	dicNotInvitedUser,
 	dicNotRequestingUser,
 	dicNotResponsibleUser,
-	dicLockedUserNotFound,
+	dicNotLockedUser,
 	dicUserIsPending,
+	dicLockedUserNotFound,
 	/*File not found*/
 	dicHelpNotFound,
 	dicLicenseNotFound,
@@ -50,6 +50,7 @@ typedef enum
 	dicInvalidOption,
 	dicInvalidSuboption,
 	dicInvalidProfile,
+	dicNotBalancedArguments,
 	dicNotPermitedProfileRequest,
 	dicHaveNotPermission,
 	/*Internal error codes*/
@@ -60,7 +61,6 @@ typedef enum
 	dicUsersFileNotExist,
 	dicRequestingUsersFileNotExist,
 	dicUnlockingUsersFileNotExist,
-/*	dicEmptyUsersFile,  */ /*this is useless. Will be probably deleted*/
 	/*Number of error codes*/
 	dicErrorCodesAmount
 } dicErrorType;

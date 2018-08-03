@@ -43,10 +43,17 @@
 dicLanguageType
 DicGetLanguageIndex (const char *dicLanguageString)
 {
-   if (!strcmp (dicLanguageString, "dicPortuguese"))
+   if (!strcmp (dicLanguageString, "dicPortuguese") /*portuguese string for the CGIs*/
+   ||  !strcmp (dicLanguageString, "portuguese") /*portuguese in english, writen by CLI user*/
+   ||  !strcmp (dicLanguageString, "português") /*portuguese in portuguese (well writen), writen by CLI user*/
+   ||  !strcmp (dicLanguageString, "portugues")) /*portuguese in portuguese (bad writen), writen by CLI user*/
+   {
       return dicPortuguese;
+   }
    else
+   {
       return dicEnglish;
+   }
 }
 
 /*

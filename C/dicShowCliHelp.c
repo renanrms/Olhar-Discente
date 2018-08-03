@@ -15,11 +15,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "dicTypes.h"
 #include "dicShowCliHelp.h"
 #include "dicFunctions.h"
-#include "dicConst.h"
 #include "dicConfig.h"
+#include "dicConst.h"
+#include "dicErrors.h"
+#include "dicTypes.h"
 
 void
 DicShowCliHelp (dicLanguageType dicLanguage)
@@ -30,18 +31,21 @@ DicShowCliHelp (dicLanguageType dicLanguage)
 	if (dicLanguage == dicEnglish)
 	{
 		dicCliHelpFile = fopen ("./dicCliHelp_en-us.txt", "r");
-		if (dicCliHelpFile == NULL)
-			printf ("Help file not found in this language. Please enter other language.");
 	}
 	else
 	{
 		dicCliHelpFile = fopen ("./dicCliHelp_pt-br.txt", "r");
-		if (dicCliHelpFile == NULL)
-			printf ("Arquivo de ajuda não encontrado nessa língua. Tente outro idioma.");
 	}
 
-	while (fgets (dicTextLine, DIC_TEXT_PARAGRAPH_MAX_LENGTH + 1, dicCliHelpFile) != NULL)
-		printf ("%s", dicTextLine);
+	if (dicCliHelpFile == NULL)
+		printf ("%s\n", DicGetCliErrorMessage (dicHelpNotFound, dicLanguage));
+	else
+	{
+		printf ("--help ------------------------------------------------------\n");
+		while (fgets (dicTextLine, DIC_TEXT_PARAGRAPH_MAX_LENGTH + 1, dicCliHelpFile) != NULL)
+			printf ("%s", dicTextLine);
+		printf ("\n--help ------------------------------------------------------\n");
+	}
 }
 
 /*$RCSfile: dicShowCliHelp.c,v $*/

@@ -21,7 +21,7 @@ typedef enum
 {
    dicEnglishMessage,
    dicPortugueseMessage,
-   /*Web and Ncurses fields*/
+   /*Web, CLI and Ncurses fields*/
    dicLoginMessage,
    dicPasswordMessage,
    dicPasswordConfirmationMessage,
@@ -42,7 +42,6 @@ typedef enum
    dicSendButtonMessage,
    dicRegisterButtonMessage,
    /*Event and notification massages*/
-   dicSuccessMessage,
    dicForHelpMessage,
    dicCorrectAuthenticateMessage,
    /*Number of messages*/

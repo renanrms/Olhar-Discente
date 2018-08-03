@@ -54,6 +54,7 @@
 #define DIC_EMAIL_BODY_MAX_LENGTH      4095
                                        /*userId(unsigned long long):nickname:hash:profile:username:email\n*/
 #define DIC_USERSFILE_LINE_MAX_LENGTH  6 + 29 + DIC_NICKNAME_MAX_LENGTH + DIC_PASSWORD_MAX_LENGTH + 1 + DIC_USERNAME_MAX_LENGTH + DIC_EMAIL_MAX_LENGTH
+#define DIC_CLI_ARGUMENT_MAX_LENGTH    100 + DIC_EMAIL_MAX_LENGTH
 
 #define DIC_INVITE_EXPIRATION_TIME     3*(24*60*60)
 #define DIC_REQUESTING_EXPIRATION_TIME 7*(24*60*60)
