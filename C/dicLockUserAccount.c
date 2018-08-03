@@ -40,7 +40,7 @@
  * dicUserIsPending - the user that you try to lock is pending
  *
  * Description:
- * This function to lock the account of an user if it is not the administrator or pending user,
+ * This function locks the account of an user if it is not the primary administrator or pending user,
  * and send an email to locked user.
  */
 dicErrorType
@@ -79,7 +79,7 @@ DicLockUserAccount (char *dicAdministratorNickname, char *dicLockedNickname)
 			if (dicLockedUser != NULL)
 				break;
 		}
-		else if (!strcmp (dicUser->nickname, dicLockedUser->nickname)) /*An user can not to lock your self*/
+		else if (!strcmp (dicUser->nickname, dicLockedNickname)) /*An user can not to lock your self*/
 		{
 			if (dicUser->userId == 0)
 				return dicHaveNotPermission;

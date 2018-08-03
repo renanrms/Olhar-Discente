@@ -31,7 +31,7 @@
  * dicUserIsPending - the user that you try to lock is pending
  *
  * Description:
- * This function to lock the account of an user if it is not the administrator or pending user,
+ * This function locks the account of an user if it is not the primary administrator or pending user,
  * and send an email to locked user.
  */
 dicErrorType

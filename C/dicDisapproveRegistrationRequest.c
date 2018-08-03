@@ -65,11 +65,11 @@ DicDisapproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequest
 
 	dicUserIdentifierType dicUserId1;
 	dicUserIdentifierType dicUserId2;
-	char dicUserNickname [DIC_NICKNAME_MAX_LENGTH];
+	char dicUserNickname [DIC_NICKNAME_MAX_LENGTH + 1];
 
 	char dicFirstName [DIC_USERNAME_MAX_LENGTH + 1];
 	char dicEncodedPassword [DIC_PASSWORD_MAX_LENGTH + 1];
-	char dicEmailBody [DIC_EMAIL_BODY_MAX_LENGTH];
+	char dicEmailBody [DIC_EMAIL_BODY_MAX_LENGTH + 1];
 	time_t dicAbsoluteValidityTime;
 
 

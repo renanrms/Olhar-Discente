@@ -61,10 +61,10 @@ DicRejectInvite (char *dicInvitedPassword, char *dicInvitedNickname)
 
 	dicUserIdentifierType dicUserId;
 	dicUserIdentifierType dicUserInvitedId;
-	char dicUserEmail [DIC_EMAIL_MAX_LENGTH];
+	char dicUserEmail [DIC_EMAIL_MAX_LENGTH + 1];
 	char dicFirstName [DIC_USERNAME_MAX_LENGTH + 1];
 	char dicEncodedPassword [DIC_PASSWORD_MAX_LENGTH + 1];
-	char dicEmailBody [DIC_EMAIL_BODY_MAX_LENGTH];
+	char dicEmailBody [DIC_EMAIL_BODY_MAX_LENGTH + 1];
 	time_t dicAbsoluteValidityTime;
 
 

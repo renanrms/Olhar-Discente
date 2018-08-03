@@ -57,6 +57,7 @@
 
 #define DIC_INVITE_EXPIRATION_TIME     3*(24*60*60)
 #define DIC_REQUESTING_EXPIRATION_TIME 7*(24*60*60)
+#define DIC_UNLOCKING_EXPIRATION_TIME  1*(24*60*60)
 
 #endif
 /*$RCSfile: dicConst.h,v $*/
