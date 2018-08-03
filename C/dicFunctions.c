@@ -26,6 +26,10 @@
 #include "dicConst.h"
 #include "dicTypes.h"
 
+static char dicFilePath [DIC_FILE_PATH_MAX_LENGTH + 1]; /*DicGetAbsolutFileName function returns a pointer to this global variable.
+                                                          The static modifier restricts the variable to this file,
+                                                          this way we can to create a variable with this name in other file independently*/
+
 /* 
  * dicLanguageType
  * DicGetLanguageIndex (const char*);
@@ -102,8 +106,6 @@ DicGetUserProfileIndex (const char *dicProfileString)
 char*
 DicGetAbsolutFileName (const char* dicDirectory, const char* dicFileName)
 {
-	extern char dicFilePath [DIC_FILE_PATH_MAX_LENGTH + 1];
-	
 	snprintf (dicFilePath, DIC_FILE_PATH_MAX_LENGTH + 1, "%s%s", dicDirectory, dicFileName);
 
 	return dicFilePath;

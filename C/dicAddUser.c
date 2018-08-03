@@ -105,7 +105,7 @@ DicAddUser (dicUserDataType *dicUserData)
 	{			
 		dicUserData->userId = 0;
 		dicUserData->profile = dicAdministrator;
-		dicUserData->nickname = dicFirstNickname;
+		strcpy (dicUserData->nickname, dicFirstNickname);
 
 		/*encode password*/
 		DicEncodePasswordWithSpecificAlgorithm (dicUserData->password, dicSha512, dicEncodedPassword);
@@ -125,7 +125,7 @@ DicAddUser (dicUserDataType *dicUserData)
 	}
 	else /*If the file exists the function should verify if will creat or invite a new user*/
 	{
-		strcpy (dicFirstName, dicUser->username);
+		strcpy (dicFirstName, dicUserData->username);
 		strtok (dicFirstName, " ");
 
 		/*open users data file*/
@@ -170,7 +170,7 @@ DicAddUser (dicUserDataType *dicUserData)
 
 			fclose (dicUsersFile);
 
-			sprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+			snprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
 			        "Welcome, ", dicFirstName, "!\n\n",
 			        "You was registered at Olhar Discente with this e-mail.\n\n\n",
 			        "You are reistered as ", dicUserData->username, " and your login data are:\n\n",
@@ -231,7 +231,7 @@ DicAddUser (dicUserDataType *dicUserData)
 
 			fclose (dicInvitedUsersFile);
 
-			sprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+			snprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
 			        "Hi, ", dicFirstName, "!\n\n",
 			        "You was invited to register at Olhar Discente (teacher evaluate system) with this e-mail.\n\n\n",
 			        "You are invited as ", dicUserData->username, " and your data are:\n\n",

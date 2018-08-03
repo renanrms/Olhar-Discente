@@ -14,9 +14,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <getopt.h>
 #include <sys/types.h>
+#include <pwd.h>
 
 #include "dicAddUser.h"
 #include "dicRequestRegistration.h"
@@ -131,7 +133,7 @@ main (int argc, char **argv)
 					}
 					optind++;
 				}
-				dicShowCliHelp (dicLanguage);
+				DicShowCliHelp (dicLanguage);
 				break;
 				
 			case 'C':  /*initial configure*/

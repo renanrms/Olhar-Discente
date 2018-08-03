@@ -15,6 +15,8 @@
 #ifndef DIC_SHOWCLIHELP_H
 #define DIC_SHOWCLIHELP_H "@(#)dicShowCliHelp.h $Revision: 1.1 $"
 
+#include "dicTypes.h"
+
 void
 DicShowCliHelp (dicLanguageType);
 

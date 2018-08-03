@@ -45,11 +45,11 @@ DIC_OBJS = dic.o\
            dicDisapproveRegistrationRequest.o
 
 #CGIs
-DIC_MAIN_OBJS = dicCgiMain.o dicUserInterface.o dicFunctions.o 
-DIC_SHOWREQUESTREGISTRATIONFORM_OBJS = dicCgiShowRequestRegistrationForm.o dicUserInterface.o dicFunctions.o
-DIC_SHOWREQUESTPASSWORDRESETFORM_OBJS = dicCgiShowRequestPasswordResetForm.o dicUserInterface.o dicFunctions.o
-DIC_SHOWWEBHELP_OBJS = dicCgiShowWebHelp.o dicUserInterface.o dicFunctions.o dicErrors.o
-DIC_SHOWLICENSE_OBJS = dicCgiShowLicense.o dicUserInterface.o dicFunctions.o dicErrors.o
+DIC_MAIN_OBJS = dicCgiMain.o dicUserInterface.o dicFunctions.o dicGetUsers.o
+DIC_SHOWREQUESTREGISTRATIONFORM_OBJS = dicCgiShowRequestRegistrationForm.o dicUserInterface.o dicFunctions.o dicGetUsers.o
+DIC_SHOWREQUESTPASSWORDRESETFORM_OBJS = dicCgiShowRequestPasswordResetForm.o dicUserInterface.o dicFunctions.o dicGetUsers.o
+DIC_SHOWWEBHELP_OBJS = dicCgiShowWebHelp.o dicUserInterface.o dicFunctions.o dicErrors.o dicGetUsers.o
+DIC_SHOWLICENSE_OBJS = dicCgiShowLicense.o dicUserInterface.o dicFunctions.o dicErrors.o dicGetUsers.o
 
 
 HTMLTOC = dicHtmlToC
@@ -87,22 +87,22 @@ dicHtmlToC: $(DIC_HTMLTOC_OBJS)
 	$(LD) $(LFLAGS) -o $@ $(DIC_HTMLTOC_OBJS)
 
 dicMain.cgi: $(DIC_MAIN_OBJS)
-	$(LD) $(LFLAGS) -o $@ $(DIC_MAIN_OBJS) $(LIBMLCGI)
+	$(LD) $(LFLAGS) -o $@ $(DIC_MAIN_OBJS) $(LIBMLCGI) $(LIBCRYPT)
 
 dicShowRequestRegistrationForm.cgi: $(DIC_SHOWREQUESTREGISTRATIONFORM_OBJS)
-	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWREQUESTREGISTRATIONFORM_OBJS) $(LIBMLCGI)
+	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWREQUESTREGISTRATIONFORM_OBJS) $(LIBMLCGI) $(LIBCRYPT)
 
 dicShowRequestPasswordResetForm.cgi: $(DIC_SHOWREQUESTPASSWORDRESETFORM_OBJS)
-	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWREQUESTPASSWORDRESETFORM_OBJS) $(LIBMLCGI)
+	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWREQUESTPASSWORDRESETFORM_OBJS) $(LIBMLCGI) $(LIBCRYPT)
 
 dicShowWebHelp.cgi: $(DIC_SHOWWEBHELP_OBJS)
-	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWWEBHELP_OBJS) $(LIBMLCGI)
+	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWWEBHELP_OBJS) $(LIBMLCGI) $(LIBCRYPT)
 
 dicShowLicense.cgi: $(DIC_SHOWLICENSE_OBJS)
-	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWLICENSE_OBJS) $(LIBMLCGI)
+	$(LD) $(LFLAGS) -o $@ $(DIC_SHOWLICENSE_OBJS) $(LIBMLCGI) $(LIBCRYPT)
 
 dic: $(DIC_OBJS)
-	$(LD) $(LFLAGS) -o $@ $(DIC_OBJS) $(LIBMLCGI) $(LIBSENDMAIL) $(LIBCRYPT)
+	$(LD) $(LFLAGS) -o $@ $(DIC_OBJS) $(LIBSENDMAIL) $(LIBCRYPT)
 
 install:
 	make uninstall
