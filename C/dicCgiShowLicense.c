@@ -47,7 +47,7 @@ main (int argc, char **argv)
    printf ("    Olhar Discente\n");
    printf ("  </title>\n");        
    printf ("</head>\n");           
-   printf ("<body bgcolor='%X'>\n", BACKGROUND_COLOR);
+   printf ("<body bgcolor='%X'>\n", DIC_BACKGROUND_COLOR);
    printf ("<body>\n");                 
    printf ("  <center>\n");             
    printf ("    <hr>\n");               
@@ -64,7 +64,7 @@ main (int argc, char **argv)
    }
    else
    {
-      while (fgets (licenseFileLine, DIC_HTMLLINE_MAX_LENGTH, licenseFile) != EOS)
+      while (fgets (licenseFileLine, DIC_HTMLLINE_MAX_LENGTH, licenseFile) != DIC_EOS)
       {
          printf ("  %s", licenseFileLine);
       }

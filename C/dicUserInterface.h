@@ -20,20 +20,26 @@ typedef enum
    dicPortugueseMessage,
    dicLoginMessage,
    dicPasswordMessage,
+   dicPasswordConfirmationMessage,
    dicSignInButtonMessage,
    dicForgotMyPasswordMessage,
    dicTermsOfUseMessage,
    dicCreateAnAccountMessage,
    dicHelpMessage,
    dicContactUsMessage,
-   dicFullNameMessage,
-   dicFullNameConfirmationMessage,
+   dicUserNameMessage,
+   dicUserNameConfirmationMessage,
    dicEmailMessage,
    dicEmailConfirmationMessage,
    dicRegisterButtonMessage,
    dicHomeMessage,
    dicSendButtonMessage,
-   dicInvalidSuboption,     /*CLI message*/
+   dicForHelpMessage,          /*CLI message*/
+   dicInvalidSuboption,        /*CLI message*/
+   dicInvalidOption,           /*CLI message*/
+   dicHasRequiredArguments,    /*CLI message*/
+   dicHaveNotPermission,       /*CLI message*/
+   dicCreatedUser,             /*CLI message*/
    dicUserInterfaceMessagesAmount
 } dicUserInterfaceMessageType;
 

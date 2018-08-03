@@ -16,23 +16,25 @@
 
 typedef enum {dicEnglish, dicPortuguese, dicLanguagesAmount} dicLanguageType;
 
+typedef enum {dicDes, dicMd5 = 1, dicSha256 = 5, dicSha512 = 6} dicCryptAlgorithms;
+
 typedef unsigned long long dicUserIdentifierType;
 
 typedef enum
 {
-	administrator=1,
-	teacher,
-	teacher_administrator,
-	student,
-	student_administrator,
-	student_teacher,
-	student_teacher_administrator
+	dicAdministrator=1,
+	dicTeacher,
+	dicTeacher_administrator,
+	dicStudent,
+	dicStudent_administrator,
+	dicStudent_teacher,
+	dicStudent_teacher_administrator
 } dicUserProfileType;
 
 typedef struct dicUserData
 {
-	dicUserIdentifierType userIdentifier;
-	dicUserProfileType perfil;
+	dicUserIdentifierType userId;
+	dicUserProfileType profile;
 	char nickname [DIC_NICKNAME_MAX_LENGTH + 1];
 	char password [DIC_PASSWORD_MAX_LENGTH + 1];
 	char passwordConfirmation [DIC_PASSWORD_MAX_LENGTH + 1];

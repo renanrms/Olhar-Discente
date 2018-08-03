@@ -40,7 +40,7 @@ main (int argc, char **argv)
    printf ("    Olhar Discente\n");
    printf ("  </title>\n");        
    printf ("</head>\n");           
-   printf ("<body bgcolor='%X'>\n", BACKGROUND_COLOR);
+   printf ("<body bgcolor='%X'>\n", DIC_BACKGROUND_COLOR);
    printf ("<body>\n");                 
    printf ("  <form action='dicLogin.cgi' method='post'>\n");
    printf ("    <center>\n");                                     
@@ -50,7 +50,7 @@ main (int argc, char **argv)
    printf ("      <a href='mailto:renanpassos@poli.ufrj.br?subject=[OLHAR%%20DISCENTE%%20-%%20%s]'>Renan Passos</a>\n", 
            DicGetWebUserInterfaceMessage (dicContactUsMessage, dicLanguage));
    printf ("      <br><br><br><br>\n");                                                                                           
-   printf ("      <table align='center' bgcolor='%X'>\n", CENTRAL_FRAME_COLOR);                                                                    
+   printf ("      <table align='center' bgcolor='%X'>\n", DIC_CENTRAL_FRAME_COLOR);                                                                    
    printf ("        <input type='hidden' name='dicLanguage' value='dicPortuguese'>\n");                                           
    printf ("        <tr>\n");                                                                                                     
    printf ("          <td></td>\n");                                                                                              
