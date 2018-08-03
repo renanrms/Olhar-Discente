@@ -51,18 +51,13 @@ main (int argc, char **argv)
 		switch (dicShotrOption)
 		{
 			case 'h':
-				if (optind == argc)
-				{
-					dicShowCliHelp (dicEnglish);
-				}
+
 				while (optind < argc)
 				{
 					switch (getsubopt (&(argv [optind]), dicArgumentsNames, &dicArgumentValue)) /*returns a index of dicArgumentsNames[]*/
 					{
 						case dicLanguageArgument:
 							dicLanguage = DicGetLanguageIndex (dicArgumentValue);
-							dicShowCliHelp (dicLanguage);
-							break;
 						
 						default:
 							printf ("%s: %s", DicGetCliUserInterfaceMessage (dicInvalidSuboption, dicLanguage), argv [optind]);
@@ -70,9 +65,11 @@ main (int argc, char **argv)
 					}
 					optind++;
 				}
+				dicShowCliHelp (dicLanguage);
 				break;
 				
 			case 'C':
+			
 				if (optind == argc)
 				{
 					dicShowCliHelp (dicEnglish);
@@ -94,21 +91,16 @@ main (int argc, char **argv)
 				break;
 
 			case 'N':
-				if (optind == argc)
-				{
-					dicShowCliHelp (dicEnglish);
-				}
+			
 				while (optind < argc)
 				{
 					switch (getsubopt (&(argv [optind]), dicArgumentsNames, &dicArgumentValue)) /*returns a index of dicArgumentsNames[]*/
 					{
 						case dicLanguageArgument:
 							dicLanguage = DicGetLanguageIndex (dicArgumentValue);
-							break;
 						
 						case dicNicknameArgument:
 							dicNickname = dicArgumentValue;
-							break;
 
 						default:
 							printf ("%s: %s", DicGetCliUserInterfaceMessage (dicInvalidSuboption, dicLanguage), argv [optind]);
@@ -116,7 +108,12 @@ main (int argc, char **argv)
 					}
 					optind++;
 				}
+				/*Call of RunNcursesInterface (dicNickname, dicLanguage)*/
 				break;
+
+			default:
+				printf ("%s: %s", DicGetCliUserInterfaceMessage (dicInvalidOption, dicLanguage), argv [optind -1]);
+				exit (dicInvalidOption);
 
 		}
 	}
