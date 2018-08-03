@@ -617,4 +617,190 @@ DicAuthenticateUser (dicUserDataType *dicUser)
       return dicNicknameNotExist;
 }
 
+/*
+ *
+ * Arguments:
+ *
+ *
+ * Returned values:
+ *
+ *
+ * Description:
+ * This function receive as parameter pointer to all possible fields of the binary files of system and
+ * each field is written in file if your pointer differs from NULL.
+ * The fields are written in file in the parameters order except for time and user identifiers parameters.
+ * The sorting criterion is necessary for determine if time argument is written before or after the user identifier parameters
+ * in adaptation to already written code of system and for a possible future incrementation in function with other sorting criteria
+ * or with the selection of user position in file according to sorting criterion.
+ */
+dicErrorType
+DicWriteInBinaryFile (char dicSortingCriterion, char* dicFileName, time_t *dicTime, dicUserProfileType *dicUserId1, dicUserProfileType *dicUserId2, char *dicPassword, char *dicEmail, char *dicEmailChangeKey/*, char *dicCookieValue, char* dicUserIp*/)
+{
+   FILE *dicBinaryFile;
+   FILE *dicBinaryFile_Temp;
+   size_t dicReadBytes;
+   size_t dicSizeOfLine = 0;
+
+   time_t *dicFileTime;
+   dicUserProfileType *dicFileUserId1;
+   dicUserProfileType *dicFileUserId2;
+   char dicFilePassword [DIC_PASSWORD_MAX_LENGTH];
+   char dicFileEmail [DIC_EMAIL_MAX_LENGTH];
+   char dicFileEmailChangeKey [DIC_EMAIL_CHANGE_KEY_LENGTH];
+
+
+   if (dicFileName == NULL
+   || (dicSortingCriterion == 'u' && dicUserId1 == NULL)
+   || (dicSortingCriterion == 't' && dicTime == NULL))
+      return dicInvalidArgument;
+
+   if (dicTime != NULL)
+      dicFileTime = NULL;
+/*   else
+      *dicFileTime = *dicTime;
+*/
+   if (dicUserId1 != NULL)
+      dicFileUserId1 = NULL;
+/*   else
+      *dicFileUserId1 = *dicUserId1;
+*/
+   if (dicUserId2 != NULL)
+      dicFileUserId2 = NULL;
+/*   else
+      *dicFileUserId2 = *dicUserId2;
+*/
+   if (dicPassword != NULL)
+      dicFilePassword = NULL;
+/*   else
+      strcpy (dicFilePassword, dicPassword);
+*/
+   if (dicEmail != NULL)
+      dicFileEmail = NULL;
+/*   else
+      strcpy (dicFileEmail, dicEmail);
+*/
+   if (dicEmailChangeKey != NULL)
+      dicFileEmailChangeKey = NULL;
+/*   else
+      strcpy (dicFileEmailChangeKey, dicEmailChangeKey);
+*/
+
+   if (dicSortingCriterion == 't') /*sort by time*/
+   {
+      dicBinaryFile = fopen (dicFileName, "a");
+
+
+   }
+   else if (dicSortingCriterion == 'u') /*sort by user identifier*/
+   {
+      dicBinaryFile = fopen (dicFileName, "r");
+      dicBinaryFile_Temp = fopen (DicGetAbsolutFileName (dicFileName, "_temporary"), "w");
+
+      DicReadNextInformationInBinaryFile ()
+   }
+   else
+      return dicInvalidArgument;
+}
+
+dicErrorType
+DicReadNextInformationInBinaryFile (char dicSortingCriterion, FILE *dicBinaryFile, time_t *dicTime, dicUserProfileType *dicUserId1, dicUserProfileType *dicUserId2, char *dicPassword, char *dicEmail, char *dicEmailChangeKey/*, char *dicCookieValue, char* dicUserIp*/)
+{
+   if (dicSortingCriterion == 'u')
+   {
+      if (dicUserId1 != NULL)
+      {
+         if (fread (&(dicUserId1), sizeof (dicUserProfileType), 1, dicBinaryFile) != sizeof (dicUserProfileType))
+            return dicEndOfFile;
+      }
+
+      if (dicUserId2 != NULL)
+      {
+         if (fread (&(dicUserId2), sizeof (dicUserProfileType), 1, dicBinaryFile) != sizeof (dicUserProfileType))
+            return dicEndOfFile;
+      }
+
+      if (dicTime != NULL)
+      {
+         if (fread (&(dicTime), sizeof (time_t), 1, dicBinaryFile) != sizeof (time_t))
+            return dicEndOfFile;
+      }
+   }
+   else if (dicSortingCriterion == 't')
+   {
+      if (dicTime != NULL)
+      {
+         if (fread (&(dicTime), sizeof (time_t), 1, dicBinaryFile) != sizeof (time_t))
+            return dicEndOfFile;
+      }
+
+      if (dicUserId1 != NULL)
+      {
+         if (fread (&(dicUserId1), sizeof (dicUserProfileType), 1, dicBinaryFile) != sizeof (dicUserProfileType))
+            return dicEndOfFile;
+      }
+
+      if (dicUserId2 != NULL)
+      {
+         if (fread (&(dicUserId2), sizeof (dicUserProfileType), 1, dicBinaryFile) != sizeof (dicUserProfileType))
+            return dicEndOfFile;
+      }
+   }
+
+   if (dicPassword != NULL)
+   {
+      if (fread (&(dicPassword), sizeof (char), DIC_PASSWORD_MAX_LENGTH, dicBinaryFile) != DIC_PASSWORD_MAX_LENGTH * sizeof (char))
+         return dicEndOfFile;
+   }
+
+   if (dicEmail != NULL)
+   {
+      if (fread (&(dicEmail), sizeof (char), DIC_EMAIL_MAX_LENGTH, dicBinaryFile) != DIC_EMAIL_MAX_LENGTH * sizeof (char))
+         return dicEndOfFile;
+   }
+
+   if (dicEmailChangeKey != NULL)
+   {
+      if (fread (&(dicEmailChangeKey), sizeof (char), DIC_EMAIL_CHANGE_KEY_LENGTH, dicBinaryFile) != DIC_EMAIL_CHANGE_KEY_LENGTH * sizeof (char))
+         return dicEndOfFile;
+   }
+
+   return dicOk;
+}
+
+dicErrorType
+DicWriteNextInformationInBinaryFile (char dicSortingCriterion, FILE *dicBinaryFile, time_t *dicTime, dicUserProfileType *dicUserId1, dicUserProfileType *dicUserId2, char *dicPassword, char *dicEmail, char *dicEmailChangeKey/*, char *dicCookieValue, char* dicUserIp*/)
+{
+   if (dicTime != NULL)
+   {
+      fwrite (&(dicTime), sizeof (time_t), 1, dicBinaryFile);
+   }
+
+   if (dicUserId1 != NULL)
+   {
+      fwrite (&(dicUserId1), sizeof (dicUserProfileType), 1, dicBinaryFile);
+   }
+
+   if (dicUserId2 != NULL)
+   {
+      fwrite (&(dicUserId2), sizeof (dicUserProfileType), 1, dicBinaryFile);
+   }
+
+   if (dicPassword != NULL)
+   {
+      fwrite (&(dicPassword), sizeof (char), DIC_PASSWORD_MAX_LENGTH, dicBinaryFile);
+   }
+
+   if (dicEmail != NULL)
+   {
+      fwrite (&(dicEmail), sizeof (char), DIC_EMAIL_MAX_LENGTH, dicBinaryFile);
+   }
+
+   if (dicEmailChangeKey != NULL)
+   {
+      fwrite (&(dicEmailChangeKey), sizeof (char), DIC_EMAIL_CHANGE_KEY_LENGTH, dicBinaryFile);
+   }
+
+   return dicOk;
+}
+
 /*$RCSfile: dicFunctions.c,v $*/
