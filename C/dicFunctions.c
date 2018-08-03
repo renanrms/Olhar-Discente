@@ -301,7 +301,7 @@ DicCreateRandomString (const char *dicValidCaracters, size_t dicLength, char *di
  * Returned values:
  * dicOk - nickname created successfully
  * dicEmptyUsername - username is empty
- * dicEmptyLastName - there isn't last name
+ * dicEmptyLastName - there's one name only
  * dicOverLengthNames - one or more names are very large
  * dicInvalidArgument - one of the arguments is pointer to NULL
  *
@@ -309,6 +309,7 @@ DicCreateRandomString (const char *dicValidCaracters, size_t dicLength, char *di
  * This function creates a first nickname option in the form <first name>.<last name>
  * and a sencond nickname option in the form <first name>.<penultimate name>.
  * In case of the username to contain only one last name the second option is a empty string. 
+ * All generated nicknames contains only lower cases independently of the username.
  */
 dicErrorType
 DicCreateNickname (const char *dicUsername, char *dicNickname1, char *dicNickname2)
@@ -335,6 +336,26 @@ DicCreateNickname (const char *dicUsername, char *dicNickname1, char *dicNicknam
 
    if (dicLastName == NULL)
       return dicEmptyLastName;
+
+   /*converts uper to lower case*/
+   dicBuffer = dicFirstName;
+   while (dicBuffer != DIC_EOS)
+   {
+      if ((dicBuffer > 'A') && (dicBuffer < 'Z'))
+         dicBuffer += 'a' - 'A';
+   }
+   dicBuffer = dicLastName;
+   while (dicBuffer != DIC_EOS)
+   {
+      if ((dicBuffer > 'A') && (dicBuffer < 'Z'))
+         dicBuffer += 'a' - 'A';
+   }
+   dicBuffer = dicMidleName;
+   while ((dicBuffer != DIC_EOS) && (dicBuffer != DIC_EOS))
+   {
+      if ((dicBuffer > 'A') && (dicBuffer < 'Z'))
+         dicBuffer += 'a' - 'A';
+   }
 
    dicReturnCode = snprintf (dicNickname1, DIC_NICKNAME_MAX_LENGTH + 1, "%s.%s", dicFirstName, dicLastName);
    if (dicReturnCode < 0) /*Is the number of written valid caracters or negative error code*/
@@ -399,8 +420,6 @@ DicGetCryptAlgorithm (const char *dicEncryptedPassword, dicCryptAlgorithms *dicA
  *
  * Returned values:
  * dicOk - Encrypted password successfully
- * dicInvalidPasswordLength - password length is out of range
- * dicInvalidPasswordCaracter - invalid caracter in password
  * dicInvalidArgument - one of the arguments is pointer to NULL
  *
  * Description:
@@ -411,16 +430,9 @@ DicEncodePasswordWithSpecificAlgorithm (char *dicPassword, dicCryptAlgorithms di
 {
    char dicSalt [DIC_SALT_MAX_LENGTH + 1]; /*salt + EOS*/
    char dicCryptSalt [DIC_SALT_MAX_LENGTH + 5]; /* $digit$salt$ + EOS */
-   dicErrorType dicReturnCode;
 
    if (dicPassword == NULL || dicEncryptedPassword == NULL)
       return dicInvalidArgument;
-
-   dicReturnCode = DicCheckStringField (dicPassword, DIC_PASSWORD_CARACTERS,  DIC_PASSWORD_MIN_LENGTH, DIC_PASSWORD_MAX_LENGTH);
-   if (dicReturnCode == dicInvalidLength)
-      return dicInvalidPasswordLength;
-   if (dicReturnCode == dicInvalidCaracter)
-      return dicInvalidPasswordCaracter;
 
    if (dicAlgorithm == dicDes)
       DicCreateRandomString (DIC_BASE_64_CHARACTERS, 2, dicCryptSalt);
@@ -474,8 +486,6 @@ DicEncodePasswordWithSpecificSalt (char *dicPassword, char *dicSalt, char *dicEn
  * Returned values:
  * dicOk - correct password
  * dicIcorrectPassword - incorrect password
- * dicInvalidPasswordLength - password length is out of range
- * dicInvalidPasswordCaracter - invalid caracter in password
  * dicInvalidArgument - one of the arguments is pointer to NULL
  *
  * Description:
@@ -486,16 +496,9 @@ DicCheckPassword (char *dicPassword, char *dicEncryptedPassword)
 {
    char dicSalt [DIC_SALT_MAX_LENGTH + 1];
    dicCryptAlgorithms dicAlgorithm;
-   dicErrorType dicReturnCode;
 
    if (dicPassword == NULL || dicEncryptedPassword == NULL)
       return dicInvalidArgument;
-
-   dicReturnCode = DicCheckStringField (dicPassword, DIC_PASSWORD_CARACTERS,  DIC_PASSWORD_MIN_LENGTH, DIC_PASSWORD_MAX_LENGTH);
-   if (dicReturnCode == dicInvalidLength)
-      return dicInvalidPasswordLength;
-   if (dicReturnCode == dicInvalidCaracter)
-      return dicInvalidPasswordCaracter;
 
    DicGetCryptAlgorithm (dicEncryptedPassword, &dicAlgorithm);
 
@@ -509,5 +512,123 @@ DicCheckPassword (char *dicPassword, char *dicEncryptedPassword)
    else
       return dicIncorrectPassword;
 }
+
+/*
+ * dicErrorType
+ * DicGetUsers (dicUserDataType**);
+ *
+ * Arguments:
+ * dicUserDataType** - pointer to pointer to first user of list (O)
+ *
+ * Returned values:
+ * dicOk - users list obtained successfully
+ * dicInvalidArgument - received argument is NULL pointer
+ * dicUsersFileNotExist - the users file not exist
+ *
+ * Description:
+ * This function gives back a pointer to first user of a doubly linked list.
+ * If the users file is empty the function gives back a ponter to NULL.
+ */
+dicErrorType
+DicGetUsers (dicUserDataType **dicFirstUser)
+{
+   FILE *dicUsersFile;
+   char dicUserLine [DIC_USERSFILE_LINE_MAX_LENGTH + 1];
+   dicUserDataType *dicUser;
+   dicUserDataType *dicPreviousUser = NULL;
+
+   if (dicFirstUser == NULL)
+      return dicInvalidArgument;
+
+   dicUsersFile = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_USERS_DATA_FILENAME), "r");
+   if (dicUsersFile == NULL)
+      return dicUsersFileNotExist;
+
+   *dicFirstUser = NULL;
+
+   while (fgets (dicUserLine, DIC_USERSFILE_LINE_MAX_LENGTH + 1, dicUsersFile) != NULL)
+   {
+      dicUser = malloc (sizeof (dicUserDataType));
+
+      if (dicPreviousUser != NULL)
+         *dicFirstUser = dicUser;
+
+      strcpy (dicUser->userId, strtok (dicUserLine, ":"));
+      strcpy (dicUser->nickname, strtok (NULL, ":"));
+      strcpy (dicUser->password, strtok (NULL, ":"));
+      strcpy (dicUser->profile, strtok (NULL, ":"));
+      strcpy (dicUser->username, strtok (NULL, ":"));
+      strcpy (dicUser->email, strtok (NULL, "\n"));
+
+      dicUser->previus = dicPreviousUser;
+
+      if (dicPreviousUser != NULL)
+         dicPreviousUser->next = dicUser;
+
+      dicPreviousUser = dicUser;
+      dicUser++;
+   }
+   dicUser->next = NULL;
+
+   return dicOk;
+}
+
+/*
+ * dicErrorType
+ * DicAuthenticateUser (dicUserDataType*);
+ *
+ * Arguments:
+ * dicUserDataType* - pointer to dicUserDataType (I/O)
+ *
+ * Returned values:
+ * dicOk - Correct login, user obtained successfully
+ * dicInvalidArgument - received argument is NULL pointer
+ * dicUsersFileNotExist - the users file not exist
+ * dicNicknameNotExist - the nickname not exist
+ * dicIncorrectPassword - the password is incorrect
+ *
+ * Description:
+ * This function receives a pointer to dicUserDataType with plain password and nickname fields
+ * and gives back the user identfier, username, email, and profile fields.
+ * If the users file is empty the function gives back a ponter to NULL.
+ */
+dicErrorType
+DicAuthenticateUser (dicUserDataType *dicUser)
+{
+   dicUserDataType *dicUserListElement;
+   dicErrorType dicReturnCode;
+   unsigned dicNicknameOccourrance = 0;
+
+   if (dicUser == NULL)
+      return dicInvalidArgument;
+
+   dicReturnCode = DicGetUsers (&dicUserListElement);
+   if (dicReturnCode != dicOk)
+      return dicReturnCode;
+
+   while (dicUserListElement != NULL)
+   {
+      if (!strcmp (dicUserListElement->nickname, dicUser->nickname))
+      {
+         if (!DicCheckPassword (dicUser->password, dicUserListElement->password))
+         {
+            strcpy (dicUser->userId, dicUserListElement->userId);
+            strcpy (dicUser->username, dicUserListElement->username);
+            strcpy (dicUser->email, dicUserListElement->email);
+            strcpy (dicUser->profile, dicUserListElement->profile);
+            return dicOk;
+         }
+         dicNicknameOccourrance++;
+      }
+
+      dicUserListElement = dicUserListElement->next;
+   }
+
+   if (dicNicknameOccourrance > 0)
+      return dicIncorrectPassword;
+   else
+      return dicNicknameNotExist;
+}
+
 
 /*$RCSfile$*/

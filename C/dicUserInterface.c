@@ -33,10 +33,6 @@ char *dicCliUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
       "",
       "",
       "For help",
-      "Invalid suboption",
-      "invalid opcion",
-      "This option has required arguments",
-      "You have not permission for this action",
       "User successfully created"
    },
    {
@@ -58,10 +54,6 @@ char *dicCliUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
       "",
       "",
       "Para ver a ajuda",
-      "Sub-opcao invalida",
-      "Opcao invalida",
-      "Esta opcao possui argumentos obigatorios",
-      "Voce nao tem permissao para esta acao",
       "Usuario criado com sucesso"
    }
 };

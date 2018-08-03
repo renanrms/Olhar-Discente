@@ -17,8 +17,29 @@
 typedef enum
 {
 	dicOk,
+	dicInvalidSuboption,
+	dicInvalidOption,
+	dicHasRequiredArguments,
+	dicHaveNotPermission,
 	dicHelpNotFound,
 	dicLicenseNotFound,
+	dicInvalidCaracter,
+	dicInvalidLength,
+	dicOverPoint,
+	dicNoPoint,
+	dicOverArroba,
+	dicNoArroba,
+	dicEmptyUsername,
+	dicEmptyLastName,
+	dicOverLengthNames,
+	dicInvalidEmailConfirmation,
+	dicUserEmailAlreadyRegistered,
+	dicInvalidPasswordConfirmation,
+	dicIcorrectPassword,
+	dicInvalidArgument,
+	dicEmptyUsersFile,
+	dicUsersFileNotExist,
+	dicNicknameNotExist,
 	dicErrorCodesAmount
 } dicErrorType;
 

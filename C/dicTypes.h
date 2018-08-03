@@ -49,11 +49,13 @@ typedef struct dicUserData
 typedef enum
 {
 	dicLanguageArgument,
+	dicCurrentUserArgument,
 	dicNicknameArgument,
 	dicUsernameArgument,
 	dicUsernameConfirmationArgument,
 	dicEmailArgument,
-	dicEmailConfirmationArgument
+	dicEmailConfirmationArgument,
+	dicProfileArgument
 } dicArgumentNameType;
 
 

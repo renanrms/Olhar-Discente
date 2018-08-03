@@ -151,7 +151,7 @@ DicCreateRandomString (const char*, size_t, char*);
  * Returned values:
  * dicOk - nickname created successfully
  * dicEmptyUsername - username is empty
- * dicEmptyLastName - there isn't last name
+ * dicEmptyLastName - there's one name only
  * dicOverLengthNames - one or more names are very large
  * dicInvalidArgument - one of the arguments is pointer to NULL
  *
@@ -159,6 +159,7 @@ DicCreateRandomString (const char*, size_t, char*);
  * This function creates a first nickname option in the form <first name>.<last name>
  * and a sencond nickname option in the form <first name>.<penultimate name>.
  * In case of the username to contain only one last name the second option is a empty string. 
+ * All generated nicknames contains only lower cases independently of the username.
  */
 dicErrorType
 DicCreateNickname (const char*, char*, char*);
@@ -192,8 +193,6 @@ DicGetCryptAlgorithm (const char*, dicCryptAlgorithms*);
  *
  * Returned values:
  * dicOk - Encrypted password successfully
- * dicInvalidPasswordLength - password length is out of range
- * dicInvalidPasswordCaracter - invalid caracter in password
  * dicInvalidArgument - one of the arguments is pointer to NULL
  *
  * Description:
@@ -233,8 +232,6 @@ DicEncodePasswordWithSpecificSalt (char*, char*, char*);
  * Returned values:
  * dicOk - correct password
  * dicIcorrectPassword - incorrect password
- * dicInvalidPasswordLength - password length is out of range
- * dicInvalidPasswordCaracter - invalid caracter in password
  * dicInvalidArgument - one of the arguments is pointer to NULL
  *
  * Description:
@@ -242,6 +239,47 @@ DicEncodePasswordWithSpecificSalt (char*, char*, char*);
  */
 dicErrorType
 DicCheckPassword (char*, char*);
+
+/*
+ * dicErrorType
+ * DicGetUsers (dicUserDataType**);
+ *
+ * Arguments:
+ * dicUserDataType** - pointer to pointer to first user of list (O)
+ *
+ * Returned values:
+ * dicOk - users list obtained successfully
+ * dicInvalidArgument - received argument is NULL pointer
+ * dicUsersFileNotExist - the users file not exist
+ *
+ * Description:
+ * This function gives back a pointer to first user of a doubly linked list.
+ * If the users file is empty the function gives back a ponter to NULL.
+ */
+dicErrorType
+DicGetUsers (dicUserDataType**);
+
+/*
+ * dicErrorType
+ * DicAuthenticateUser (dicUserDataType*);
+ *
+ * Arguments:
+ * dicUserDataType* - pointer to dicUserDataType (I/O)
+ *
+ * Returned values:
+ * dicOk - Correct login, user obtained successfully
+ * dicInvalidArgument - received argument is NULL pointer
+ * dicUsersFileNotExist - the users file not exist
+ * dicNicknameNotExist - the nickname not exist
+ * dicIncorrectPassword - the password is incorrect
+ *
+ * Description:
+ * This function receives a pointer to dicUserDataType with plain password and nickname fields
+ * and gives back the user identfier, username, email, and profile fields.
+ * If the users file is empty the function gives back a pointer to NULL.
+ */
+dicErrorType
+DicAuthenticateUser (dicUserDataType*);
 
 #endif 
 

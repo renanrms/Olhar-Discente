@@ -16,12 +16,18 @@ char *DicCliErrorMessages [dicLanguagesAmount][dicErrorCodesAmount] =
 {
    {
       "Ok",
-      "File error",
+      "Invalid suboption",
+      "invalid opcion",
+      "This option has required arguments",
+      "You have not permission for this action",
       ""
    },
    {
       "Sucesso",
-      "Erro relacionado com arquivo",
+      "Sub-opcao invalida",
+      "Opcao invalida",
+      "Esta opcao possui argumentos obigatorios",
+      "Voce nao tem permissao para esta acao",
       ""
    }
 };

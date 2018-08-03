@@ -34,12 +34,8 @@ typedef enum
    dicRegisterButtonMessage,
    dicHomeMessage,
    dicSendButtonMessage,
-   dicForHelpMessage,          /*CLI message*/
-   dicInvalidSuboption,        /*CLI message*/
-   dicInvalidOption,           /*CLI message*/
-   dicHasRequiredArguments,    /*CLI message*/
-   dicHaveNotPermission,       /*CLI message*/
-   dicCreatedUser,             /*CLI message*/
+   dicForHelpMessage,
+   dicCreatedUser,
    dicUserInterfaceMessagesAmount
 } dicUserInterfaceMessageType;
 

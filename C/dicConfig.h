@@ -14,7 +14,7 @@
 
 
 #ifndef DIC_WEB_SERVER_URL
-#define DIC_WEB_SERVER_URL "http://www02.del.ufrj.br/~renan.passos/DIC"
+#define DIC_WEB_SERVER_URL "http://www02.del.ufrj.br/~renan.passos/DIC/"
 #endif /* #ifndef DIC_WEB_SERVER_URL */
 
 #ifndef DIC_ADMINISTRATOR_USER_IDENTIFIER

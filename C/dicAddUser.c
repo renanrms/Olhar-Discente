@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include "dicGetUsers.h"
 #include "dicAddUser.h"
@@ -26,48 +27,52 @@ dicErrorType
 DicAddUser (dicUserDataType *dicUserData)
 {
 	FILE *dicUsersFile;
+	FILE *dicInvitedUsersFile;
 
+	char dicFirstName [DIC_NICKNAME_MAX_LENGTH + 1];
 	char dicFirstNickname [DIC_NICKNAME_MAX_LENGTH + 1];
 	char dicSecondNickname [DIC_NICKNAME_MAX_LENGTH + 1];
-	char dicGeneratedPassword [DIC_PASSWORD_MAX_LENGTH + 1];
 	char dicEncodedPassword [DIC_PASSWORD_MAX_LENGTH + 1];
+	char dicPrimaryAdminEmail [DIC_EMAIL_MAX_LENGTH + 1];
 
-	unsigned dicNicknameExist = 0;
-	unsigned dicReturnCode = 0;
+	char dicEmailBody [DIC_EMAIL_BODY_MAX_LENGTH + 1];
 
 	size_t dicUsernameLength;
 
-	dicUserDataType *dicFirstUser;
-	dicUserDataType *dicAdmin = NULL;
+	time_t dicAbsoluteValidityTime;
 
-	dicUserIdentifierType dicUserIdentifierIndex = 0;
+	dicErrorType dicReturnCode = 0;
+
+	dicUserDataType *dicRegisteredUser;
 		
 	/*Check email*/
-	if(DicCheckEmail (dicUserData->email, DIC_EMAIL_CARACTERS, DIC_EMAIL_MIN_LENGTH, DIC_EMAIL_MAX_LENGTH) != 0 )
-		return dicInvalidEmail;
-	
+	dicReturnCode = DicCheckEmail (dicUserData->email, DIC_EMAIL_CARACTERS, DIC_EMAIL_MIN_LENGTH, DIC_EMAIL_MAX_LENGTH);
+	if(dicReturnCode != dicOk)
+		return dicReturnCode;
 	if(strcmp (dicUserData->email, dicUserData->emailConfirmation) != 0)
 		return dicInvalidEmailConfirmation;	
 
-	/*Check/encode password*/
-	dicReturnCode = DicEncodePasswordWithSpecificAlgorithm (dicUserData->password, dicSha512, dicEncodedPassword);
-	if(dicReturnCode != dicOk)
-		return dicReturnCode;
-
-	if(strcmp (dicUserData->password, dicUserData->passwordConfirmation) != 0)
+	/*Check password*/
+	if (strlen (dicUserData->password) != 0)
+	{
+		dicReturnCode = DicCheckStringField (dicUserData->password, DIC_PASSWORD_CARACTERS, DIC_PASSWORD_MIN_LENGTH, DIC_PASSWORD_MAX_LENGTH);
+		if (dicReturnCode != dicOk)
+			return dicReturnCode;
+	}
+	if(strcmp (dicUserData->password, dicUserData->passwordConfirmation))
 		return dicInvalidPasswordConfirmation;
 
 	/*Check username*/
-	dicUsernameLength = strlen (dicUserData->username);
-	if((dicUsernameLength < DIC_USERNAME_MIN_LENGTH) || (dicUsernameLength > DIC_USERNAME_MAX_LENGTH))
-		return dicInvalidUsername;
+	dicReturnCode = DicCheckStringField (dicUserData->username, DIC_USERNAME_CARACTERS, DIC_USERNAME_MIN_LENGTH, DIC_USERNAME_MAX_LENGTH);
+	if(dicReturnCode != dicOk)
+		return dicReturnCode;
 
 	/*Create nickname*/
 	dicReturnCode = DicCreateNickname (dicUserData->username, dicFirstNickname, dicSecondNickname);
 	if(dicReturnCode != dicOk)
 		return dicReturnCode;
 
-	dicUsersFile = fopen (DIC_USERS_DATABASE_FILE, "r");
+	dicUsersFile = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_USERS_DATA_FILENAME), "r");
 
 	if (dicUsersFile == NULL) /*if the data file does note exist, the function adds the firt user (administrator) with userId = 0*/
 	{			
@@ -75,96 +80,177 @@ DicAddUser (dicUserDataType *dicUserData)
 		dicUserData->profile = dicAdministrator;
 		dicUserData->nickname = dicFirstNickname;
 
-		dicUsersFile = fopen (DIC_USERS_DATABASE_FILE, "w");
+		/*encode password*/
+		DicEncodePasswordWithSpecificAlgorithm (dicUserData->password, dicSha512, dicEncodedPassword);
+
+		dicUsersFile = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_USERS_DATA_FILENAME), "w");
 
 		/*userId:nickname:password:profile:username:email\n*/
 		fprintf (dicUsersFile, "%llu:%s:%s:%i:%s:%s\n", 
 			     dicUserData->userId,
 		        dicUserData->nickname,
-			     dicUserData->password,
+			     dicEncodedPassword,
 			     dicUserData->profile,
 			     dicUserData->username,
 			     dicUserData->email);
-	}
-	else /*If the file exists the function should verify if will operate in the next two options*/
-	{
-		dicUsersFile = fopen (DIC_USERS_DATABASE_FILE, "a");
 
-		if(strlen (dicUserData->password) != 0) /*empty password indicates that user is pendent or locked*/
+		fclose (dicUsersFile);
+	}
+	else /*If the file exists the function should verify if will creat or invite a new user*/
+	{
+		dicFirstName = strtok (dicUserData->username, " ");
+
+		/*open users data file*/
+		dicUsersFile = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_USERS_DATA_FILENAME), "a");
+
+		/*first user*/
+		dicReturnCode = DicGetUsers (&dicRegisteredUser);		
+		if(dicReturnCode != dicOk)
+			return dicReturnCode;
+
+		strcpy (dicPrimaryAdminEmail, dicRegisteredUser->email);
+
+		/*Check nickname and email in file*/		
+		while(dicRegisteredUser != NULL)
 		{
-			/*Check nickname and email in database*/		
-			dicReturnCode = DicGetUsers (&dicFirstUser);		
+			/*nickname already exist*/
+			if(!strcmp (dicRegisteredUser->nickname, dicUserData->nickname))
+				strcpy (dicUserData->nickname, dicSecondNickname);
+
+			/*email already exist*/
+			if(!strcmp (dicRegisteredUser->email, dicUserData->email))
+				return dicUserEmailAlreadyRegistered;
+
+			dicUserData->userId = dicRegisteredUser->userId;
+			dicRegisteredUser = dicRegisteredUser->next;
+		}
+
+		dicUserData->userId++;
+
+		/*free the linked list*/	
+		DicFreeUsersLinkedList (dicRegisteredUser);
+
+		if(strlen (dicUserData->password) != 0) /*if no empty password creates a new user*/
+		{
+			/*Check and encode password*/
+			dicReturnCode = DicEncodePasswordWithSpecificAlgorithm (dicUserData->password, dicSha512, dicEncodedPassword);	
 			if(dicReturnCode != dicOk)
 				return dicReturnCode;
 
-			dicAdmin = dicFirstUser;
-			
-			while(dicFirstUser != NULL)
-			{
-				/*nickname already exist*/
-				if(!strcmp (dicFirstUser->nickname, dicUserData->nickname))
-					dicNicknameExist = 1;
-
-				/*email already exist*/
-				if(!strcmp (dicFirstUser->email, dicUserData->email))
-					return dicUserEmailAlreadyRegistered;
-
-				dicUserIdentifierIndex = dicFirstUser->userId;
-				dicFirstUser = dicFirstUser->next;	
-			}
-
-			if (dicNicknameExist)
-				strcpy (dicUserData->nickname, dicSecondNickname);
-
-			/*free the linked list*/	
-			DicFreeUsersLinkedList (dicFirstUser);
-			/*increment one to userId*/
-			dicUserData->userId = dicUserIdentifierIndex + 1;	
-			/*encode password*/
-			DicEncodePasswordWithSpecificAlgorithm (dicUserData->password, dicSha512, dicUserData->password);	
-
 			fprintf (dicUsersFile, "%llu:%s:%s:%i:%s:%s\n", 
-				dicUserData->userId,
-				dicUserData->nickname,
-				dicUserData->password, 
-				dicSimpleUser, /*Simple User = 1*/
-				dicUserData->username,
-				dicUserData->email
-		 		);
+						dicUserData->userId,
+						dicUserData->nickname,
+						dicEncodedPassword, 
+						dicUserData->profile, 
+						dicUserData->username,
+						dicUserData->email);
 
-			/*Send email to user*/
+			fclose (dicUsersFile);
+
+			sprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+			        "Welcome, ", dicFirstName, "!\n\n",
+			        "You was registered at Olhar Discente with this e-mail.\n\n\n",
+			        "You are reistered as ", dicUserData->username, " and your login data are:\n\n",
+			        "\tNickname: ", dicUserData->nickname,
+			        "\n\tPassword: ", dicUserData->password,
+			        "\n\n\nVisit us in here: ", DIC_WEB_SERVER_URL, "CGIs/dicMain.cgi?dicLanguage=dicEnglish\n",
+			        "In majority of the e-mail systems this is a blue link and you can click. In other cases copy for your browser.\n\n\n",
+			        "-------------------------------------------------------\n\n\n",
+			        "Bem-vindo, ", dicFirstName, "!\n\n",
+			        "Você foi registrado em Olhar Discente com este e-mail.\n\n\n",
+			        "Você está registrado como ", dicUserData->username, " e seus dados de login são:\n\n",
+			        "\tApelido: ", dicUserData->nickname,
+			        "\n\tSenha: ", dicUserData->password,
+			        "\n\n\nAcesse aqui: ", DIC_WEB_SERVER_URL, "CGIs/dicMain.cgi?dicLanguage=dicPortuguese\n",
+			        "Na maioria dos sistemas de e-mail isto é um link azul e é possível clicá-lo. Se este não é o caso copie para a barra do seu navegador.\n"
+			        );
+
+			/*Send email to new user*/
 			sendMail (
 				DIC_SMTP_CLIENT_DOMAIN,
 				DIC_SMTP_SERVER_FULL_HOSTNAME,
 				DIC_SMTP_SERVER_PORT,
-				dicAdmin->email, /*From Admin*/
+				dicPrimaryAdminEmail, /*From Admin*/
 				dicUserData->email, /*To*/
 				NULL, /*cc*/
 				NULL, /*bcc*/
-				"User of Olhar Discente Registered successfully ", /*Subject*/
-				"You was registered successfully at Olhar Discente.\n",   /*Body*/
+				"Olhar Discente - User Registered successfully", /*Subject*/
+				dicEmailBody,   /*Body*/
 				NULL  /*Attatchement*/
 			);
 		}
 		else
 		{
-			/*
-		 	 * Now we're assuming that the function receives an empty password,
- 		 	 * so must be generated a random password and sent to user email 
- 		 	 */
-		
 			/*Create a temporary password with 16 random characters*/
-         DicCreateRandomString(DIC_TEMP_PASSWORD_CHARACTERS, 16, dicGeneratedPassword);
-		
+        	DicCreateRandomString(DIC_TEMP_PASSWORD_CHARACTERS, DIC_TEMP_PASSWORD_LENGTH, dicUserData->password);
+
 			/*Encode the password created*/
-			DicEncodePasswordWithSpecificAlgorithm(dicGeneratedPassword, dicSha512, dicUserData->password);	
-		
-			/*Open users.abeyances*/
+			DicEncodePasswordWithSpecificAlgorithm(dicUserData->password, dicSha512, dicEncodedPassword);
 
+			/*userId:nickname::profile:username:email\n*/
+			fprintf (dicUsersFile, "%llu:%s::%i:%s:%s\n", 
+						dicUserData->userId,
+		   				dicUserData->nickname,
+						dicUserData->profile,
+						dicUserData->username,
+						dicUserData->email);
 
-			/*send email with link to confirm registration*/
+			fclose (dicUsersFile);
 
+			/*open invited users file*/
+			dicInvitedUsersFile = fopen (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_INVITED_USERS_DATA_FILENAME), "a");
 
+			dicAbsoluteValidityTime = time (NULL) + 3*DIC_SECONDS_PER_DAY;
+			/*<validity><userId><encoded password>*/
+			fwrite (&(dicAbsoluteValidityTime), sizeof (size_t), 1, dicInvitedUsersFile);
+			fwrite (&(dicUserData->userId), sizeof (dicUserIdentifierType), 1, dicInvitedUsersFile);
+			fwrite (&(dicEncodedPassword), sizeof (dicEncodedPassword), 1, dicInvitedUsersFile);
+
+			fclose (dicInvitedUsersFile);
+
+			sprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+			        "Hi, ", dicFirstName, "!\n\n",
+			        "You was invited to register at Olhar Discente (teacher evaluate system) with this e-mail.\n\n\n",
+			        "You are invited as ", dicUserData->username, " and your data are:\n\n",
+			        "\tNickname: ", dicUserData->nickname,
+			        "\n\tTemporary password: ", dicUserData->password,
+			        "\nDo not worry about any errors in your name, you will be able to change it.\n\n\n",
+			        "For accept access: ", DIC_WEB_SERVER_URL,
+			        "CGIs/dicAcceptInviteForm.cgi?dicNickname=", dicUserData->nickname,
+			        "&dicLanguage=dicEnglish\n",
+			        "In majority of the e-mail systems this is a blue link and you can click. In other cases copy for your browser.\n\n",
+			        "This invite expires in 72 hours if you do not accept.\n\n",
+			        "For reject this invite access: ", DIC_WEB_SERVER_URL,
+			        "CGIs/dicRejectInviteForm.cgi?dicLanguage=dicEnglish\n\n\n",
+			        "-------------------------------------------------------\n\n\n",
+			        "Olá, ", dicFirstName, "!\n\n",
+			        "Você foi convidado a regstrar-se em Olhar Discente (sistema de avaliação de docentes) com este e-mail.\n\n\n",
+			        "Você está convidado como ", dicUserData->username, " e seus dados são:\n\n",
+			        "\tApelido: ", dicUserData->nickname,
+			        "\n\tSenha temporária: ", dicUserData->password,
+			        "\nNão se preocupe com eventuais erros no seu nome, você poderá corrigi-los futuramente.\n\n\n",
+			        "Para aceitar o convite acesse: ", DIC_WEB_SERVER_URL,
+			        "CGIs/dicAcceptInviteForm.cgi?dicNickname=", dicUserData->nickname,
+			        "&dicLanguage=dicPortuguese\n",
+			        "Na maioria dos sistemas de e-mail isto é um link azul e é possível clicá-lo. Se este não é o caso copie para a barra do seu navegador.\n",
+			        "Este convite expira em 72 horas se você não aceitá-lo.\n\n",
+			        "Para rejeitá-lo acesse: ", DIC_WEB_SERVER_URL,
+			        "CGIs/dicRejectInviteForm.cgi?dicLanguage=dicEnglish\n"
+			        );
+
+			/*Send invite email*/
+			sendMail (
+				DIC_SMTP_CLIENT_DOMAIN,
+				DIC_SMTP_SERVER_FULL_HOSTNAME,
+				DIC_SMTP_SERVER_PORT,
+				dicPrimaryAdminEmail, /*From Admin*/
+				dicUserData->email, /*To*/
+				NULL, /*cc*/
+				NULL, /*bcc*/
+				"Olhar Discente - Invite to Register", /*Subject*/
+				dicEmailBody,   /*Body*/
+				NULL  /*Attatchement*/
+			);
 
 		}
 
