@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef DIC_DISAPPROVEREGISTRATIONREQUEST_H
-#define DIC_DISAPPROVEREGISTRATIONREQUEST_H "@(#)dicDisapproveRegistrationRequest.h $Revision: 1.1 $"
+#ifndef DIC_APPROVEREGISTRATIONREQUEST_H
+#define DIC_APPROVEREGISTRATIONREQUEST_H "@(#)dicApproveRegistrationRequest.h $Revision: 1.1 $"
 
 #include "dicErrors.h"
 

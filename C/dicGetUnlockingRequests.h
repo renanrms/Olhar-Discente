@@ -9,8 +9,8 @@
  * $Log$
  */
 
-#ifndef DIC_<ARQUIVO>_H
-#define DIC_<ARQUIVO>_H "@(#)dic<Arquivo>.h $Revision$"
+#ifndef DIC_GETUNLOCKINGREQUESTS_H
+#define DIC_GETUNLOCKINGREQUESTS_H "@(#)dicGetUnlockingRequests.h $Revision$"
 
 #include "dicTypes.h"
 #include "dicErrors.h"

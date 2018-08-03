@@ -17,7 +17,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "dicDisapproveRegistrationRequest.h"
+#include "dicApproveRegistrationRequest.h"
 #include "dicGetUsers.h"
 #include "dicFunctions.h"
 #include "dicErrors.h"

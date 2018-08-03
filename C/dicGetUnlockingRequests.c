@@ -9,6 +9,19 @@
  * $Log$
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "dicGetUnlockingRequests.h"
+#include "dicGetUsers.h"
+#include "dicFunctions.h"
+#include "dicErrors.h"
+#include "dicConfig.h"
+#include "dicConst.h"
+#include "dicTypes.h"
+
+
 /*
  * dicErrorType
  * DicGetUnlockingRequests (dicNicknameListType**);
