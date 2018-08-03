@@ -4,13 +4,16 @@
  * Prof. Marcelo Luiz Drumond Lanza
  * EEL 270 - Computacao II - Turma 2016/1
  * 
- * $Author$
- * $Date$
- * $Log$
+ * $Author: renan.passos $
+ * $Date: 2016/08/30 14:05:18 $
+ * $Log: dicTypes.h,v $
+ * Revision 1.1  2016/08/30 14:05:18  renan.passos
+ * Initial revision
+ *
  */
 
 #ifndef DIC_TYPES_H
-#define DIC_TYPES_H "@(#)dicTypes.h $Revision$"
+#define DIC_TYPES_H "@(#)dicTypes.h $Revision: 1.1 $"
 
 #include "dicConst.h"
 
@@ -63,4 +66,4 @@ typedef enum
 
 #endif 
 
-/*$RCSfile$*/
+/*$RCSfile: dicTypes.h,v $*/

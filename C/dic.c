@@ -4,15 +4,19 @@
  * EEL270 - Computacao II - Turma 2016/1
  * Prof. Marcelo Luiz Drumond Lanza
  *
- * $Author$
- * $Date$
- * $Log$
+ * $Author: renan.passos $
+ * $Date: 2016/08/30 14:05:18 $
+ * $Log: dic.c,v $
+ * Revision 1.1  2016/08/30 14:05:18  renan.passos
+ * Initial revision
+ *
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
+#include <sys/types.h>
 
 #include "dicAddUser.h"
 #include "dicRequestRegistration.h"
@@ -769,4 +773,4 @@ main (int argc, char **argv)
 
 }
 
-/*$RCSfile$*/
+/*$RCSfile: dic.c,v $*/

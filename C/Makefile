@@ -4,9 +4,12 @@
 # EEL270 - Computacao II - Turma 2016/1
 # Prof. Marcelo Luiz Drumond Lanza
 #
-# $Author$
-# $Date$
-# $Log$
+# $Author: renan.passos $
+# $Date: 2016/08/30 14:08:22 $
+# $Log: Makefile,v $
+# Revision 1.1  2016/08/30 14:08:22  renan.passos
+# Initial revision
+#
 #
 
 CC = gcc
@@ -26,7 +29,21 @@ LIBCRYPT = -lcrypt
 #Suport file. Convert HTML to printf in C.
 DIC_HTMLTOC_OBJS = dicHtmlToC.o
 #CLI file
-DIC_OBJS = dic.o dicFunctions.o dicErrors.o dicShowCliHelp.o dicAddUser.o dicAcceptInvite.o dicRequestRegistration.o dicUserInterface.o dicGetUsers.o 
+DIC_OBJS = dic.o\
+           dicErrors.o\
+           dicUserInterface.o\
+           dicFunctions.o\
+           dicShowCliHelp.o\
+           dicGetUsers.o\
+           dicAddUser.o\
+           dicAcceptInvite.o\
+           dicRejectInvite.o\
+           dicRequestRegistration.o\
+           dicGetPendingRegistrationRequests.o\
+           dicGetPendingRegistrationRequestsPerUser.o\
+           dicApproveRegistrationRequest.o\
+           dicDisapproveRegistrationRequest.o
+
 #CGIs
 DIC_MAIN_OBJS = dicCgiMain.o dicUserInterface.o dicFunctions.o 
 DIC_SHOWREQUESTREGISTRATIONFORM_OBJS = dicCgiShowRequestRegistrationForm.o dicUserInterface.o dicFunctions.o
@@ -57,6 +74,13 @@ all: $(EXECS)
 
 clean:
 	rm -f *.o $(EXECS)
+
+
+htmltoc: $(HTMLTOC)
+
+cgis: $(CGIS)
+
+cli: $(CLI)
 
 
 dicHtmlToC: $(DIC_HTMLTOC_OBJS)
@@ -104,6 +128,8 @@ install:
 	cp $(DIC_ROOT)/Sources/HTML/index_pt-br.html $(DIC_WEB_ROOT)/HTML/index_pt-br.html
 
 	cp $(DIC_ROOT)/Sources/C/dic $(DIC_ROOT)/Binaries/dic
+	cp $(DIC_ROOT)/Sources/C/dicCliHelp_en-us.txt $(DIC_ROOT)/Binaries/dicCliHelp_en-us.txt
+	cp $(DIC_ROOT)/Sources/C/dicCliHelp_pt-br.txt $(DIC_ROOT)/Binaries/dicCliHelp_pt-br.txt
 
 uninstall:
 	rm -rf $(DIC_ROOT)/Binaries
@@ -124,4 +150,4 @@ uninstall:
 #
 
 
-#$RCSfile$
+#$RCSfile: Makefile,v $

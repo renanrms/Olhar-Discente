@@ -4,9 +4,12 @@
  * Prof. Marcelo Luiz Drumond Lanza
  * EEL 270 - Computacao II - Turma 2016/1
  * 
- * $Author$
- * $Date$
- * $Log$
+ * $Author: renan.passos $
+ * $Date: 2016/08/30 14:05:18 $
+ * $Log: dicErrors.c,v $
+ * Revision 1.1  2016/08/30 14:05:18  renan.passos
+ * Initial revision
+ *
  */
 
 #include "dicErrors.h"
@@ -122,4 +125,4 @@ DicGetWebErrorMessage (dicErrorType dicError, dicLanguageType dicLanguage)
    return DicWebErrorMessages [dicLanguage][dicError];
 }
 
-/*$RCSfile$*/
+/*$RCSfile: dicErrors.c,v $*/

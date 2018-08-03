@@ -4,9 +4,12 @@
  * EEL270 - Computacao II - Turma 2016/1
  * Prof. Marcelo Luiz Drumond Lanza
  *
- * $Author$
- * $Date$
- * $Log$
+ * $Author: renan.passos $
+ * $Date: 2016/08/30 14:05:18 $
+ * $Log: dicShowCliHelp.c,v $
+ * Revision 1.1  2016/08/30 14:05:18  renan.passos
+ * Initial revision
+ *
  */
 
 #include <stdio.h>
@@ -26,15 +29,19 @@ DicShowCliHelp (dicLanguageType dicLanguage)
 
 	if (dicLanguage == dicEnglish)
 	{
-		dicCliHelpFile = fopen (DicGetAbsolutFileName (DIC_PRIVATE_ROOT_DIRECTORY, "Binaries/dicCliHelp_en-us.txt"), "r");
+		dicCliHelpFile = fopen ("./dicCliHelp_en-us.txt", "r");
+		if (dicCliHelpFile == NULL)
+			printf ("Help file not found in this language. Please enter other language.");
 	}
 	else
 	{
-		dicCliHelpFile = fopen (DicGetAbsolutFileName (DIC_PRIVATE_ROOT_DIRECTORY, "Binaries/dicCliHelp_pt-br.txt"), "r");
+		dicCliHelpFile = fopen ("./dicCliHelp_pt-br.txt", "r");
+		if (dicCliHelpFile == NULL)
+			printf ("Arquivo de ajuda não encontrado nessa língua. Tente outro idioma.");
 	}
 
 	while (fgets (dicTextLine, DIC_TEXT_PARAGRAPH_MAX_LENGTH + 1, dicCliHelpFile) != NULL)
 		printf ("%s", dicTextLine);
 }
 
-/*$RCSfile$*/
+/*$RCSfile: dicShowCliHelp.c,v $*/

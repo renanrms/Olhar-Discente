@@ -4,13 +4,16 @@
  * Prof. Marcelo Luiz Drumond Lanza
  * EEL 270 - Computacao II - Turma 2016/1
  * 
- * $Author$
- * $Date$
- * $Log$
+ * $Author: renan.passos $
+ * $Date: 2016/08/30 14:05:18 $
+ * $Log: dicGetPendingRegistrationRequests.h,v $
+ * Revision 1.1  2016/08/30 14:05:18  renan.passos
+ * Initial revision
+ *
  */
 
 #ifndef DIC_GETPENDINGREGISTRATIONREQUESTS_H
-#define DIC_GETPENDINGREGISTRATIONREQUESTS_H "@(#)dicGetPendingRegistrationRequests.h $Revision$"
+#define DIC_GETPENDINGREGISTRATIONREQUESTS_H "@(#)dicGetPendingRegistrationRequests.h $Revision: 1.1 $"
 
 #include "dicErrors.h"
 #include "dicTypes.h"
@@ -37,4 +40,4 @@ DicGetPendingRegistrationRequests (dicUserDataType**);
 
 #endif 
 
-/*$RCSfile$*/
+/*$RCSfile: dicGetPendingRegistrationRequests.h,v $*/

@@ -4,13 +4,16 @@
  * Prof. Marcelo Luiz Drumond Lanza
  * EEL 270 - Computacao II - Turma 2016/1
  * 
- * $Author$
- * $Date$
- * $Log$
+ * $Author: renan.passos $
+ * $Date: 2016/08/30 14:05:18 $
+ * $Log: dicConst.h,v $
+ * Revision 1.1  2016/08/30 14:05:18  renan.passos
+ * Initial revision
+ *
  */
 
 #ifndef DIC_CONST_H
-#define DIC_CONST_H "@(#)dicConst.h $Revision$"
+#define DIC_CONST_H "@(#)dicConst.h $Revision: 1.1 $"
 
 #include "dicTypes.h"
 
@@ -56,4 +59,4 @@
 #define DIC_REQUESTING_EXPIRATION_TIME 7*(24*60*60)
 
 #endif
-/*$RCSfile$*/
+/*$RCSfile: dicConst.h,v $*/

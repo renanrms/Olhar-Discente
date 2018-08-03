@@ -4,13 +4,16 @@
  * Prof. Marcelo Luiz Drumond Lanza
  * EEL 270 - Computacao II - Turma 2016/1
  * 
- * $Author$
- * $Date$
- * $Log$
+ * $Author: renan.passos $
+ * $Date: 2016/08/30 14:05:18 $
+ * $Log: dicAcceptInvite.h,v $
+ * Revision 1.1  2016/08/30 14:05:18  renan.passos
+ * Initial revision
+ *
  */
 
 #ifndef DIC_ACCEPTINVITE_H
-#define DIC_ACCEPTINVITE_H "@(#)dicAcceptInvite.h $Revision$"
+#define DIC_ACCEPTINVITE_H "@(#)dicAcceptInvite.h $Revision: 1.1 $"
 
 #include "dicErrors.h"
 #include "dicTypes.h"
@@ -41,4 +44,4 @@ DicAcceptInvite (char*, dicUserDataType*);
 
 #endif 
 
-/*$RCSfile$*/
+/*$RCSfile: dicAcceptInvite.h,v $*/

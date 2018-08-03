@@ -4,13 +4,16 @@
  * Prof. Marcelo Luiz Drumond Lanza
  * EEL 270 - Computacao II - Turma 2016/1
  * 
- * $Author$
- * $Date$
- * $Log$
+ * $Author: renan.passos $
+ * $Date: 2016/08/30 14:05:18 $
+ * $Log: dicUserInterface.h,v $
+ * Revision 1.1  2016/08/30 14:05:18  renan.passos
+ * Initial revision
+ *
  */
 
 #ifndef DIC_USERINTERFACE_H
-#define DIC_USERINTERFACE_H "@(#)dicUserInterface.h $Revision$"
+#define DIC_USERINTERFACE_H "@(#)dicUserInterface.h $Revision: 1.1 $"
 
 #include "dicTypes.h"
 
@@ -113,4 +116,4 @@ DicGetWebUserInterfaceMessage (dicUserInterfaceMessageType, dicLanguageType);
 
 #endif 
 
-/*$RCSfile$*/
+/*$RCSfile: dicUserInterface.h,v $*/

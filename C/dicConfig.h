@@ -4,13 +4,16 @@
  * Prof. Marcelo Luiz Drumond Lanza
  * EEL 270 - Computacao II - Turma 2016/1
  * 
- * $Author$
- * $Date$
- * $Log$
+ * $Author: renan.passos $
+ * $Date: 2016/08/30 14:05:18 $
+ * $Log: dicConfig.h,v $
+ * Revision 1.1  2016/08/30 14:05:18  renan.passos
+ * Initial revision
+ *
  */
 
 #ifndef DIC_CONFIG_H
-#define DIC_CONFIG_H "@(#)dicConfig.h $Revision$"
+#define DIC_CONFIG_H "@(#)dicConfig.h $Revision: 1.1 $"
 
 #ifndef DIC_PRIMARY_ADMINISTRATOR_EMAIL
 #define DIC_PRIMARY_ADMINISTRATOR_EMAIL "renanpassos@poli.ufrj.br"
@@ -67,4 +70,4 @@
 
 #endif /* #ifndef DIC_CONFIG_H */ 
 
-/*$RCSfile$*/
+/*$RCSfile: dicConfig.h,v $*/

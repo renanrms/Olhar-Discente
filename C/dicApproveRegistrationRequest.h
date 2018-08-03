@@ -4,13 +4,16 @@
  * Prof. Marcelo Luiz Drumond Lanza
  * EEL 270 - Computacao II - Turma 2016/1
  * 
- * $Author$
- * $Date$
- * $Log$
+ * $Author: renan.passos $
+ * $Date: 2016/08/30 14:05:18 $
+ * $Log: dicApproveRegistrationRequest.h,v $
+ * Revision 1.1  2016/08/30 14:05:18  renan.passos
+ * Initial revision
+ *
  */
 
 #ifndef DIC_DISAPPROVEREGISTRATIONREQUEST_H
-#define DIC_DISAPPROVEREGISTRATIONREQUEST_H "@(#)dicDisapproveRegistrationRequest.h $Revision$"
+#define DIC_DISAPPROVEREGISTRATIONREQUEST_H "@(#)dicDisapproveRegistrationRequest.h $Revision: 1.1 $"
 
 #include "dicErrors.h"
 
@@ -38,4 +41,4 @@ DicApproveRegistrationRequest (char*, char*);
 
 #endif 
 
-/*$RCSfile$*/
+/*$RCSfile: dicApproveRegistrationRequest.h,v $*/

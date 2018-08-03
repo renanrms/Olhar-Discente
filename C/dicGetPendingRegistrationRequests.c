@@ -4,9 +4,12 @@
  * EEL270 - Computacao II - Turma 2016/1
  * Prof. Marcelo Luiz Drumond Lanza
  *
- * $Author$
- * $Date$
- * $Log$
+ * $Author: renan.passos $
+ * $Date: 2016/08/30 14:05:18 $
+ * $Log: dicGetPendingRegistrationRequests.c,v $
+ * Revision 1.1  2016/08/30 14:05:18  renan.passos
+ * Initial revision
+ *
  */
 
 #include <stdio.h>
@@ -14,6 +17,7 @@
 #include <string.h>
 
 #include "dicGetPendingRegistrationRequests.h"
+#include "dicGetUsers.h"
 #include "dicFunctions.h"
 #include "dicErrors.h"
 #include "dicTypes.h"
@@ -145,4 +149,4 @@ DicGetPendingRegistrationRequests (dicUserDataType **dicFirstRequestingUser)
 	return dicOk;
 }
 
-/*$RCSfile$*/
+/*$RCSfile: dicGetPendingRegistrationRequests.c,v $*/

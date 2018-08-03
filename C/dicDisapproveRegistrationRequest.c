@@ -4,9 +4,12 @@
  * EEL270 - Computacao II - Turma 2016/1
  * Prof. Marcelo Luiz Drumond Lanza
  *
- * $Author$
- * $Date$
- * $Log$
+ * $Author: renan.passos $
+ * $Date: 2016/08/30 14:05:18 $
+ * $Log: dicDisapproveRegistrationRequest.c,v $
+ * Revision 1.1  2016/08/30 14:05:18  renan.passos
+ * Initial revision
+ *
  */
 
 #include <stdio.h>
@@ -255,4 +258,4 @@ DicDisapproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequest
 	return dicOk;
 }
 
-/*$RCSfile$*/
+/*$RCSfile: dicDisapproveRegistrationRequest.c,v $*/
