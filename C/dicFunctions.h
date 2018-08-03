@@ -164,7 +164,7 @@ DicCreateRandomString (const char*, size_t, char*);
  *
  * Returned values:
  * dicOk - nickname created successfully
- * dicEmptyUsername - username is empty
+ * dicInvalidUsername - username is empty
  * dicEmptyLastName - there's one name only
  * dicOverLengthNames - one or more names are very large
  * dicInvalidArgument - one of the arguments is pointer to NULL

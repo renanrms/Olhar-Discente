@@ -337,7 +337,7 @@ DicCreateRandomString (const char *dicValidCaracters, size_t dicLength, char *di
  *
  * Returned values:
  * dicOk - nickname created successfully
- * dicEmptyUsername - username is empty
+ * dicInvalidUsername - username is empty
  * dicEmptyLastName - there's one name only
  * dicOverLengthNames - one or more names are very large
  * dicInvalidArgument - one of the arguments is pointer to NULL
@@ -366,7 +366,7 @@ DicCreateNickname (const char *dicUsername, char *dicNickname1, char *dicNicknam
    dicFirstName = strtok (dicUsernameCopy, " '-");
 
    if (dicFirstName == NULL)
-      return dicEmptyUsername;
+      return dicInvalidUsername;
 
    while ((dicBuffer = strtok (NULL, " '-")) != NULL) /*returns NULL if there are't additional non empty strings*/
    {

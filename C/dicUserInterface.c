@@ -12,6 +12,8 @@
  *
  */
 
+#include <stdlib.h>
+
 #include "dicUserInterface.h"
 #include "dicTypes.h"
 

@@ -243,14 +243,14 @@ DicDisapproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequest
 	strcpy (dicFirstName, dicRequesting->username);
 	strtok (dicFirstName, " ");
 
-	snprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
-	        "Hi, ", dicFirstName, "!\n\n",
-	        "Your registration at Olhar Discente with this e-mail was disapproved.\n\n\n",
+	snprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+	        "Hi, ", dicFirstName,
+	        "\n\nYour registration at Olhar Discente with this e-mail was disapproved.\n\n\n",
 	        "For more informations contact us or visit the site: ", DIC_WEB_SERVER_URL, "CGIs/dicMain.cgi?dicLanguage=dicEnglish\n",
 	        "In majority of the e-mail systems this is a blue link and you can click. In other cases copy for your browser.\n\n\n",
 	        "-------------------------------------------------------\n\n\n",
-	        "Olá, ", dicFirstName, "!\n\n",
-	        "Seu cadastro em Olhar Discente com este e-mail foi desprovado.\n\n\n",
+	        "Olá, ", dicFirstName,
+	        "\n\nSeu cadastro em Olhar Discente com este e-mail foi desprovado.\n\n\n",
 	        "Para mais informações contacte-nos ou acesse aqui: ", DIC_WEB_SERVER_URL, "CGIs/dicMain.cgi?dicLanguage=dicPortuguese\n",
 	        "Na maioria dos sistemas de e-mail isto é um link azul e é possível clicá-lo. Se este não é o caso copie para a barra do seu navegador.\n"
 	        );

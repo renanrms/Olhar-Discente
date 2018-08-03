@@ -12,6 +12,8 @@
  *
  */
 
+#include <stdlib.h>
+
 #include "dicErrors.h"
 #include "dicTypes.h"
 
