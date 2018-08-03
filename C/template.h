@@ -15,25 +15,18 @@
 #include "dicTypes.h"
 #include "dicErrors.h"
 
-/* Modelo de comentario para prototipo de funcao*/
 /* 
- * dicErrorType
- * DicCreateRandomString (char *, unsigned, char *);
+ *
  *
  * Arguments:
- * char * - set of valid characters to create the string (I)
- * unsigned - string length (I)
- * char * - string (O)
+ *
  *
  * Returned value:
- * dicOk - Function has been executed successfully.
- * dicCreateRandomStringInvalidCharacterSet . . .
-   . . .
+ *
+ *
  * Description:
- * This function creates a random . . .
+ *
  */
-
-/* codigo do arquivo */
 
 #endif 
 

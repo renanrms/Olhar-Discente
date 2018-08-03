@@ -41,6 +41,7 @@ main (int argc, char **argv)
 	char dicFriendEmail [DIC_EMAIL_MAX_LENGTH];
 	dicUserDataType *dicUserData;
 	dicUserDataType *dicCurrentUser;
+	dicNicknameListType *dicNicknames;
 	dicLanguageType dicLanguage = dicEnglish;
 	dicErrorType dicReturnCode;
 
@@ -187,15 +188,12 @@ main (int argc, char **argv)
 
 						dicReturnCode = DicAddUser (dicUserData);
 
-						if (dicReturnCode == dicOk)
+						printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+						if (dicReturnCode != dicOk)
 						{
-							printf ("%s\n", DicGetCliUserInterfaceMessage (dicSuccessMessage, dicLanguage));
-						}
-						else
-						{
-							printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 							exit (dicReturnCode);
 						}
+						return dicOk;
 					}
 					else
 					{
@@ -309,17 +307,13 @@ main (int argc, char **argv)
 					if ((dicCurrentUser->profile % 2) == 1) /*if user is administrator*/
 					{
 						dicReturnCode = DicAddUser (dicUserData);
-						if (dicReturnCode == dicOk)
+
+						printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+						if (dicReturnCode != dicOk)
 						{
-							printf ("%s\n", DicGetCliUserInterfaceMessage (dicSuccessMessage, dicLanguage));
-							return dicOk;
-						}
-						else
-						{
-							printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 							exit (dicReturnCode);
 						}
-
+						return dicOk;
 					}
 					else
 					{
@@ -415,16 +409,13 @@ main (int argc, char **argv)
 				{
 					/*invite user*/
 					dicReturnCode = DicAddUser (dicUserData);
-					if (dicReturnCode == dicOk)
+
+					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+					if (dicReturnCode != dicOk)
 					{
-						printf ("%s\n", DicGetCliUserInterfaceMessage (dicSuccessMessage, dicLanguage));
-						return dicOk;
-					}
-					else
-					{
-						printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 						exit (dicReturnCode);
 					}
+					return dicOk;
 				}
 				else if ((dicCurrentUser->profile % 2) == 2 || (dicCurrentUser->profile % 2) == 3) /*if user is teacher*/
 				{
@@ -437,16 +428,13 @@ main (int argc, char **argv)
 					}
 					/*invite user*/
 					dicReturnCode = DicAddUser (dicUserData);
-					if (dicReturnCode == dicOk)
+
+					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+					if (dicReturnCode != dicOk)
 					{
-						printf ("%s\n", DicGetCliUserInterfaceMessage (dicSuccessMessage, dicLanguage));
-						return dicOk;
-					}
-					else
-					{
-						printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 						exit (dicReturnCode);
 					}
+					return dicOk;
 				}
 				else /*user is student*/
 				{
@@ -459,16 +447,13 @@ main (int argc, char **argv)
 					}
 					/*invite user*/
 					dicReturnCode = DicAddUser (dicUserData);
-					if (dicReturnCode == dicOk)
+
+					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+					if (dicReturnCode != dicOk)
 					{
-						printf ("%s\n", DicGetCliUserInterfaceMessage (dicSuccessMessage, dicLanguage));
-						return dicOk;
-					}
-					else
-					{
-						printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 						exit (dicReturnCode);
 					}
+					return dicOk;
 				}
 				break;
 
@@ -510,12 +495,13 @@ main (int argc, char **argv)
 				strcpy (dicUserData->passwordConfirmation, getpass (DicGetCliUserInterfaceMessage (dicPasswordConfirmationMessage, dicLanguage)));
 
 				dicReturnCode = DicAcceptInvite (dicCurrentUser->password, dicUserData);
+
+				printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 				if (dicReturnCode != dicOk)
 				{
-					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 					exit (dicReturnCode);
 				}
-				printf ("%s\n", DicGetCliUserInterfaceMessage (dicSuccessMessage, dicLanguage));
+				return dicOk;
 
 				break;
 
@@ -554,12 +540,13 @@ main (int argc, char **argv)
 				strcpy (dicCurrentUser->password, getpass (DicGetCliUserInterfaceMessage (dicTempPasswordMessage, dicLanguage)));
 			
 				dicReturnCode = DicRejectInvite (dicCurrentUser->password, dicCurrentUser->nickname);
+
+				printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 				if (dicReturnCode != dicOk)
 				{
-					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 					exit (dicReturnCode);
 				}
-				printf ("%s\n", DicGetCliUserInterfaceMessage (dicSuccessMessage, dicLanguage));
+				return dicOk;
 
 				break;
 
@@ -634,12 +621,13 @@ main (int argc, char **argv)
 				strcpy (dicUserData->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordConfirmationMessage, dicLanguage)));
 
 				dicReturnCode = DicRequestRegistration (dicFriendEmail, dicUserData);
+
+				printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 				if (dicReturnCode != dicOk)
 				{
-					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 					exit (dicReturnCode);
 				}
-				printf ("%s\n", DicGetCliUserInterfaceMessage (dicSuccessMessage, dicLanguage));
+				return dicOk;
 
 				break;
 
@@ -761,12 +749,257 @@ main (int argc, char **argv)
 
 				break;
 
+			case 'v':
+
+				while (optind < argc)
+				{
+					/*possible suboptions for this option*/
+					switch (getsubopt (&(argv [optind]), dicArgumentsNames, &dicArgumentValue))
+					{
+						case dicLanguageArgument:
+							dicLanguage = DicGetLanguageIndex (dicArgumentValue);
+							break;
+
+						case dicCurrentUserNicknameArgument:
+							strcpy (dicCurrentUser->nickname, dicArgumentValue);
+							break;
+
+						case dicNicknameArgument:
+							strcpy (dicUserData->nickname, dicArgumentValue);
+							break;
+
+						default:
+							printf ("%s: %s\n", DicGetCliErrorMessage (dicInvalidSuboption, dicLanguage), argv [optind]);
+							printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
+							exit (dicInvalidSuboption);
+					}
+					optind++;
+				}
+
+				/*required suboptions*/
+				if (
+					   dicCurrentUser->nickname[0]          ==  DIC_EOS
+					|| dicUserData->nickname[0]             ==  DIC_EOS
+				)
+				{
+					printf ("%s\n", DicGetCliErrorMessage (dicHasRequiredArguments, dicLanguage));
+					printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
+					exit (dicHasRequiredArguments);
+				}
+
+				/*Authenticate current user*/
+				strcpy (dicCurrentUser->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
+				dicReturnCode = DicAuthenticateUser (dicCurrentUser);
+				if (dicReturnCode != dicOk)
+				{
+					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+					exit (dicReturnCode);
+				}
+				printf ("%s\n", DicGetCliUserInterfaceMessage (dicCorrectAuthenticateMessage, dicLanguage));
+
+				dicReturnCode = DicApproveRegistrationRequest (dicCurrentUser->nickname, dicUserData->nickname);
+				printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+				if (dicReturnCode != dicOk)
+				{
+					exit (dicReturnCode);
+				}
+
+				break;
+
+			case 'd':
+
+				while (optind < argc)
+				{
+					/*possible suboptions for this option*/
+					switch (getsubopt (&(argv [optind]), dicArgumentsNames, &dicArgumentValue))
+					{
+						case dicLanguageArgument:
+							dicLanguage = DicGetLanguageIndex (dicArgumentValue);
+							break;
+
+						case dicCurrentUserNicknameArgument:
+							strcpy (dicCurrentUser->nickname, dicArgumentValue);
+							break;
+
+						case dicNicknameArgument:
+							strcpy (dicUserData->nickname, dicArgumentValue);
+							break;
+
+						default:
+							printf ("%s: %s\n", DicGetCliErrorMessage (dicInvalidSuboption, dicLanguage), argv [optind]);
+							printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
+							exit (dicInvalidSuboption);
+					}
+					optind++;
+				}
+
+				/*required suboptions*/
+				if (
+					   dicCurrentUser->nickname[0]          ==  DIC_EOS
+					|| dicUserData->nickname[0]             ==  DIC_EOS
+				)
+				{
+					printf ("%s\n", DicGetCliErrorMessage (dicHasRequiredArguments, dicLanguage));
+					printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
+					exit (dicHasRequiredArguments);
+				}
+
+				/*Authenticate current user*/
+				strcpy (dicCurrentUser->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
+				dicReturnCode = DicAuthenticateUser (dicCurrentUser);
+				if (dicReturnCode != dicOk)
+				{
+					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+					exit (dicReturnCode);
+				}
+				printf ("%s\n", DicGetCliUserInterfaceMessage (dicCorrectAuthenticateMessage, dicLanguage));
+
+				dicReturnCode = DicDisapproveRegistrationRequest (dicCurrentUser->nickname, dicUserData->nickname);
+				printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+				if (dicReturnCode != dicOk)
+				{
+					exit (dicReturnCode);
+				}
+
+				break;
+
+			case 'U':
+
+				while (optind < argc)
+				{
+					/*possible suboptions for this option*/
+					switch (getsubopt (&(argv [optind]), dicArgumentsNames, &dicArgumentValue))
+					{
+						case dicLanguageArgument:
+							dicLanguage = DicGetLanguageIndex (dicArgumentValue);
+							break;
+
+						case dicCurrentUserNicknameArgument:
+							strcpy (dicCurrentUser->nickname, dicArgumentValue);
+							break;
+
+						default:
+							printf ("%s: %s\n", DicGetCliErrorMessage (dicInvalidSuboption, dicLanguage), argv [optind]);
+							printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
+							exit (dicInvalidSuboption);
+					}
+					optind++;
+				}
+
+				/*required suboptions*/
+				if (dicCurrentUser->nickname[0] == DIC_EOS)
+				{
+					printf ("%s\n", DicGetCliErrorMessage (dicHasRequiredArguments, dicLanguage));
+					printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
+					exit (dicHasRequiredArguments);
+				}
+
+				/*Authenticate current user*/
+				strcpy (dicCurrentUser->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
+				dicReturnCode = DicAuthenticateUser (dicCurrentUser);
+				if (dicReturnCode != dicOk)
+				{
+					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+					exit (dicReturnCode);
+				}
+				printf ("%s\n", DicGetCliUserInterfaceMessage (dicCorrectAuthenticateMessage, dicLanguage));
+
+				/*permissions*/
+				if (!(dicCurrentUser->profile & dicAdministrator)) /*if user is't administrator*/
+				{
+					/*have not permission*/
+					printf ("%s\n", DicGetCliErrorMessage (dicHaveNotPermission, dicLanguage));
+					printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
+					exit (dicHaveNotPermission);
+				}
+
+				dicReturnCode = DicGetUnlockingRequests (&dicNicknames);
+				if (dicReturnCode != dicOk)
+				{
+					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+					exit (dicReturnCode);
+				}
+
+				while (dicNicknames != NULL)
+				{
+					printf ("%s\n", dicNicknames->nickname);
+					dicNicknames = dicNicknames->next;
+				}
+
+				break;
+
+			case 's':
+
+				while (optind < argc)
+				{
+					/*possible suboptions for this option*/
+					switch (getsubopt (&(argv [optind]), dicArgumentsNames, &dicArgumentValue))
+					{
+						case dicLanguageArgument:
+							dicLanguage = DicGetLanguageIndex (dicArgumentValue);
+							break;
+
+						case dicCurrentUserNicknameArgument:
+							strcpy (dicCurrentUser->nickname, dicArgumentValue);
+							break;
+
+						default:
+							printf ("%s: %s\n", DicGetCliErrorMessage (dicInvalidSuboption, dicLanguage), argv [optind]);
+							printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
+							exit (dicInvalidSuboption);
+					}
+					optind++;
+				}
+
+				/*required suboptions*/
+				if (dicCurrentUser->nickname[0] == DIC_EOS)
+				{
+					printf ("%s\n", DicGetCliErrorMessage (dicHasRequiredArguments, dicLanguage));
+					printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
+					exit (dicHasRequiredArguments);
+				}
+
+				/*Authenticate current user*/
+				strcpy (dicCurrentUser->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
+				dicReturnCode = DicAuthenticateUser (dicCurrentUser);
+				if (dicReturnCode != dicOk)
+				{
+					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+					exit (dicReturnCode);
+				}
+				printf ("%s\n", DicGetCliUserInterfaceMessage (dicCorrectAuthenticateMessage, dicLanguage));
+
+				dicReturnCode = DicGetUsers (&dicUserData);
+				if (dicReturnCode != dicOk)
+				{
+					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+					exit (dicReturnCode);
+				}
+
+				while (dicUserData != NULL)
+				{
+					if (dicUserData->password[0] != DIC_EOS)
+					{
+						printf ("%llu%s\t%s\t%s\t%s\n",
+						        dicUserData->userId,
+						        DicGetUserProfileString (dicUserData->profile, dicLanguage),
+						        dicUserData->nickname,
+						        dicUserData->username,
+						        dicUserData->email);
+						dicUserData = dicUserData->next;
+					}
+				}
+
+				break;
+
 			default:
 				printf ("%s: %s\n", DicGetCliErrorMessage (dicInvalidOption, dicLanguage), argv [optind]);
 				printf ("%s: %s -h/--help\n", DicGetCliUserInterfaceMessage (dicForHelpMessage, dicLanguage), argv[0]);
 				exit (dicInvalidOption);
 
 		}
+
+		return dicOk;
 	}
 
 	printf ("%s: %s\n", DicGetCliErrorMessage (dicNoOptionEntered, dicLanguage), argv [optind]);

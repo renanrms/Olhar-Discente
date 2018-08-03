@@ -123,13 +123,10 @@ DicRequestRegistration(char *dicResponsibleEmail, dicUserDataType *dicRequesting
 		return dicUserEmailNotFound;
 
 	/*verifys if the profile of request is permited*/
-	if (dicRequestingUser->profile == dicTeacher || dicRequestingUser->profile == dicStudent_teacher)
+	if (dicRequestingUser->profile % 2 == 1)
 	{
-		if (dicResponsibleUser->profile == dicStudent)
-			return dicNotPermitedProfileRequest;
-	}
-	else if (dicRequestingUser->profile != dicStudent)
 		return dicNotPermitedProfileRequest;
+	}
 
 	DicEncodePasswordWithSpecificAlgorithm(dicRequestingUser->password, dicSha512, dicEncodedPassword);
 

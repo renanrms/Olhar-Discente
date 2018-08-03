@@ -363,12 +363,12 @@ DicCreateNickname (const char *dicUsername, char *dicNickname1, char *dicNicknam
 
    strcpy (dicUsernameCopy, dicUsername);
 
-   dicFirstName = strtok (dicUsernameCopy, " ");
+   dicFirstName = strtok (dicUsernameCopy, " '-");
 
    if (dicFirstName == NULL)
       return dicEmptyUsername;
 
-   while ((dicBuffer = strtok (NULL, " ")) != NULL) /*returns NULL if there are't additional non empty strings*/
+   while ((dicBuffer = strtok (NULL, " '-")) != NULL) /*returns NULL if there are't additional non empty strings*/
    {
       dicMidleName = dicLastName;
       dicLastName = dicBuffer;

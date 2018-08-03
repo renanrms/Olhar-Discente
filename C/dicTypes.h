@@ -50,6 +50,12 @@ typedef struct dicUserData
 	struct dicUserData *previous; 
 } dicUserDataType;
 
+typedef struct dicUserNicknames
+{
+	char nickname [DIC_NICKNAME_MAX_LENGTH];
+	struct dicUserNicknames *next;
+} dicNicknameListType;
+
 typedef enum
 {
 	dicLanguageArgument,

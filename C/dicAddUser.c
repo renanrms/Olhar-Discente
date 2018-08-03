@@ -93,6 +93,8 @@ DicAddUser (dicUserDataType *dicUserData)
 	dicReturnCode = DicCheckStringField (dicUserData->username, DIC_USERNAME_CARACTERS, DIC_USERNAME_MIN_LENGTH, DIC_USERNAME_MAX_LENGTH);
 	if(dicReturnCode != dicOk)
 		return dicInvalidUsername;
+	if(strcmp (dicUserData->username, dicUserData->usernameConfirmation))
+		return dicInvalidUsernameConfirmation;
 
 	/*Create nickname*/
 	dicReturnCode = DicCreateNickname (dicUserData->username, dicFirstNickname, dicSecondNickname);

@@ -27,7 +27,7 @@
  * dicUserDataType** - pointer to pointer to first element of requesting users linked list (O)
  *
  * Returned values:
- * dicOk - registration request was approved successfully
+ * dicOk - get requestings successfully
  * dicInvalidArgument - one of the received arguments is NULL pointer
  * dicRequestingUsersFileNotExist - the requesting users file not exist
  * dicUsersFileNotExist - the users file not exist

@@ -20,38 +20,46 @@
 typedef enum
 {
 	dicOk,
-	dicInvalidArgument,
-	dicNoOptionEntered,
-	dicInvalidOption,
-	dicInvalidSuboption,
-	dicInvalidProfile,
+	/*Invalid fields*/
 	dicHasRequiredArguments,
-	dicHaveNotPermission,
-	dicHelpNotFound,
-	dicLicenseNotFound,
-	dicInvalidCaracter,
-	dicInvalidLength,
-	dicInvalidNickname,
 	dicInvalidEmail,
-	dicInvalidUsername,
-	dicEmptyUsername,
-	dicEmptyLastName,
-	dicOverLengthNames,
 	dicInvalidEmailConfirmation,
-	dicUserEmailAlreadyRegistered,
-	dicUserEmailNotFound,
+	dicInvalidUsername,
+/*	dicEmptyUsername,  */ /*this is included in invalid error message and will be deleted*/
+	dicEmptyLastName, /*this error exist to show other warning to user*/
+	dicOverLengthNames, /*this error exist to indicate an typing error and show other warning to user*/
+	dicInvalidUsernameConfirmation,
 	dicInvalidPassword,
 	dicInvalidPasswordConfirmation,
-	dicIncorrectPassword,
-	dicEmptyUsersFile,
-	dicUsersFileNotExist,
-	dicRequestingUsersFileNotExist,
+	/*Incorrect fields*/
 	dicNicknameNotExist,
+	dicIncorrectPassword,
+	dicUserEmailAlreadyRegistered,
+	dicUserEmailNotFound,
 	dicUserAlreadyRegistered,
 	dicNotInvitedUser,
 	dicNotRequestingUser,
 	dicNotResponsibleUser,
+	/*File not found*/
+	dicHelpNotFound,
+	dicLicenseNotFound,
+	/*CLI error messages*/
+	dicNoOptionEntered,
+	dicInvalidOption,
+	dicInvalidSuboption,
+	dicInvalidProfile,
 	dicNotPermitedProfileRequest,
+	dicHaveNotPermission,
+	/*Internal error codes*/
+	dicInvalidArgument,
+	dicInvalidCaracter,
+	dicInvalidLength,
+	dicInvalidNickname,
+	dicUsersFileNotExist,
+	dicRequestingUsersFileNotExist,
+	dicUnlockingUsersFileNotExist,
+/*	dicEmptyUsersFile,  */ /*this is useless. Will be probably deleted*/
+	/*Number of error codes*/
 	dicErrorCodesAmount
 } dicErrorType;
 

@@ -92,26 +92,23 @@
 				}
 
 				/*permissions*/
-				if ((dicCurrentUser->profile % 2) == 1) /*if user is administrator*/
+				if (dicCurrentUser->profile & dicAdministrator) /*if user is administrator*/
 				{
 					dicReturnCode = DicAddUser (dicUserData);
-					if (dicReturnCode == dicOk)
+
+					printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
+					if (dicReturnCode != dicOk)
 					{
-						printf ("%s\n", DicGetCliUserInterfaceMessage (dicCreatedUserMessage, dicLanguage));
-						return dicOk;
-					}
-					else
-					{
-						printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 						exit (dicReturnCode);
 					}
+					return dicOk;
 
 				}
-				else if ((dicCurrentUser->profile % 2) == 2 || (dicCurrentUser->profile % 2) == 3) /*if user is teacher*/
+				else if (dicCurrentUser->profile & dicTeacher) /*if user is teacher*/
 				{
 
 				}
-				else if (dicCurrentUser->profile >= 4)/*user is student*/
+				else if (dicCurrentUser->profile & dicStudent)/*user is student*/
 				{
 					
 				}

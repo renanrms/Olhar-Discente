@@ -231,29 +231,37 @@ DicApproveRegistrationRequest (char *dicResponsibleNickname, char *dicRequesting
 	rename (DicGetAbsolutFileName (DIC_DATA_DIRECTORY, ".temporary_users"),
 	        DicGetAbsolutFileName (DIC_DATA_DIRECTORY, DIC_USERS_DATA_FILENAME));
 
-	/*create message*/
-	snprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
-	        "Hi, ", dicFirstName, "!\n\n",
-	        "You rejected the invite at Olhar Discente with success and your all data are deleted.\n\n\n\n",
-	        "If want to know the site access: ", DIC_WEB_SERVER_URL, "CGIs/dicMain.cgi?dicLanguage=dicEnglish\n",
+	strcpy (dicFirstName, dicRequesting->username);
+	strtok (dicFirstName, " ");
+
+	snprintf (dicEmailBody, DIC_EMAIL_BODY_MAX_LENGTH + 1, "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+	        "Welcome, ", dicFirstName, "!\n\n",
+	        "You was registered at Olhar Discente with this e-mail.\n\n\n",
+	        "You are reistered as ", dicRequesting->username, " and your login data are:\n\n",
+	        "\tNickname: ", dicRequesting->nickname,
+	        "\n\tPassword: ", dicRequesting->password,
+	        "\n\n\nVisit us in here: ", DIC_WEB_SERVER_URL, "CGIs/dicMain.cgi?dicLanguage=dicEnglish\n",
 	        "In majority of the e-mail systems this is a blue link and you can click. In other cases copy for your browser.\n\n\n",
 	        "-------------------------------------------------------\n\n\n",
-	        "Olá, ", dicFirstName, "!\n\n",
-	        "Você rejeitou seu convite de cadastramento em Olhar Discente com sucesso e todos os seus dado foram deletados.\n\n\n\n",
-	        "Caso queira conhecer melhor o site acesse aqui: ", DIC_WEB_SERVER_URL, "CGIs/dicMain.cgi?dicLanguage=dicPortuguese\n",
+	        "Bem-vindo, ", dicFirstName, "!\n\n",
+	        "Você foi registrado em Olhar Discente com este e-mail.\n\n\n",
+	        "Você está registrado como ", dicRequesting->username, " e seus dados de login são:\n\n",
+	        "\tApelido: ", dicRequesting->nickname,
+	        "\n\tSenha: ", dicRequesting->password,
+	        "\n\n\nAcesse aqui: ", DIC_WEB_SERVER_URL, "CGIs/dicMain.cgi?dicLanguage=dicPortuguese\n",
 	        "Na maioria dos sistemas de e-mail isto é um link azul e é possível clicá-lo. Se este não é o caso copie para a barra do seu navegador.\n"
 	        );
 
-	/*Send email to Approved user*/
+	/*Send email to new user*/
 	sendMail (
 		DIC_SMTP_CLIENT_DOMAIN,
 		DIC_SMTP_SERVER_FULL_HOSTNAME,
 		DIC_SMTP_SERVER_PORT,
 		DIC_PRIMARY_ADMINISTRATOR_EMAIL, /*From Admin*/
-		dicRequesting->email, /*To*/
+		dicUserData->email, /*To*/
 		NULL, /*cc*/
 		NULL, /*bcc*/
-		"Olhar Discente - User Request Disapprove", /*Subject*/
+		"Olhar Discente - User Registration Approved", /*Subject*/
 		dicEmailBody,   /*Body*/
 		NULL  /*Attatchement*/
 	);
