@@ -32,7 +32,7 @@ char *dicUserProfileStrings [dicLanguagesAmount][dicUserProfilesAmountMoreOne - 
       "estudente_professor",
       "estudente_professor_administrador"
    }
-}
+};
 
 char *dicCliUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesAmount] =
 {
@@ -54,6 +54,10 @@ char *dicCliUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
       "",
       "",
       "",
+      "",
+      "",
+      "",
+      "",
       "For help",
       "User successfully created"
    },
@@ -63,6 +67,10 @@ char *dicCliUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
       "",
       "Senha",
       "Confirmacao de senha",
+      "",
+      "",
+      "",
+      "",
       "",
       "",
       "",
@@ -104,9 +112,11 @@ char *dicNcursesUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessa
       "",
       "",
       "",
+      "",
       ""
    },
    {
+      "",
       "",
       "",
       "",
@@ -156,6 +166,7 @@ char *dicWebUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
       "",
       "",
       "",
+      "",
       ""
    },
    {
@@ -177,6 +188,7 @@ char *dicWebUserInterfaceMessages [dicLanguagesAmount][dicUserInterfaceMessagesA
       "Cadastrar",
       "P&aacutegina Principal",
       "Enviar"
+      "",
       "",
       "",
       "",

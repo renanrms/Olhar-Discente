@@ -73,7 +73,7 @@
 				}
 
 				/*Authenticate current user*/
-				dicCurrentUser->password = getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage));
+				strcpy (dicCurrentUser->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
 				dicReturnCode = DicAuthenticateUser (dicCurrentUser);
 				if (dicReturnCode != dicOk)
 				{
@@ -92,7 +92,7 @@
 				}
 
 				/*permissions*/
-				if ((dicCurrentUser->profile % 2) = 1) /*if user is administrator*/
+				if ((dicCurrentUser->profile % 2) == 1) /*if user is administrator*/
 				{
 					dicReturnCode = DicAddUser (dicUserData);
 					if (dicReturnCode == dicOk)

@@ -14,19 +14,19 @@ DicShowCliHelp (dicLanguageType dicLanguage)
 {
 	if (dicLanguage == dicEnglish)
 	{
-		printf ("
-\nSee portuguese help.\n
+		printf ("\
+\nSee portuguese help.\n\
 		        ");
 	}
 	else
 	{
 		printf ("
-\n		Exibir ajuda: -h | --help [language=english | portuguese]
+\n		Exibir ajuda: -h | --help [language=english | portuguese]\
+\n\
+\n		Executar a interface Ncurses: -N | --Ncurses [nickname=<apelido>] [language=english | portuguese]\
 \n
-\n		Executar a interface Ncurses: -N | --Ncurses [nickname=<apelido>] [language=english | portuguese]
-\n
-\n		Criar a configuração inicial do sistema: -C | --Configure  username=<nome completo> confirm-username=<nome completo> email=<endereço eletrônico> confirm-email=<endereço eletrônico> [language=english | portuguese]
-\n
+\n		Criar a configuração inicial do sistema: -C | --Configure  username=<nome completo> confirm-username=<nome completo> email=<endereço eletrônico> confirm-email=<endereço eletrônico> [language=english | portuguese]\
+\n\
 \n		Adicionar um usuário ao sistema: -a | --add  user=<apelido> username=<nome completo> confirm-username=<nome completo> email=<endereço eletrônico> confirm-email=<endereço eletrônico> profile=<administrator | professor | student> [language=english | portuguese]
 \n
 \n		Convidar um usuário para participar do sistema: -i | --invite user=<apelido> username=<nome completo> confirm-username=<nome completo> email=<endereço eletrônico> confirm-email=<endereço eletrônico> profile=<administrator | professor | student> [language=english | portuguese]

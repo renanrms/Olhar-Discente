@@ -9,8 +9,10 @@
  * $Log$
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "dicUserInterface.h"
 #include "dicFunctions.h"
@@ -67,14 +69,14 @@ DicGetUserProfileIndex (const char *dicProfileString)
       dicLanguage = 0;
       while (dicLanguage < dicLanguagesAmount)
       {
-         if (!strcmp (dicProfileString, DicGetUserProfileString (, dicEnglish)) || !strcmp (dicProfileString, DicGetUserProfileString (, dicPortuguese)))
+         if (!strcmp (dicProfileString, DicGetUserProfileString (dicUserProfileIndex, dicEnglish)) || !strcmp (dicProfileString, DicGetUserProfileString (dicUserProfileIndex, dicPortuguese)))
             return dicUserProfileIndex;
          dicLanguage++;
       }
       dicUserProfileIndex++;
    }
 
-   return dicUserProfilesAmount;
+   return dicUserProfilesAmountMoreOne;
 }
 
 /*
@@ -95,7 +97,7 @@ DicGetUserProfileIndex (const char *dicProfileString)
 char*
 DicGetAbsolutFileName (const char* dicDirectory, const char* dicFileName)
 {
-	char *dicFilePath [DIC_FILE_PATH_MAX_LENGTH + 1];
+	extern char dicFilePath [DIC_FILE_PATH_MAX_LENGTH + 1];
 	
 	snprintf (dicFilePath, DIC_FILE_PATH_MAX_LENGTH + 1, "%s%s", dicDirectory, dicFileName);
 
@@ -370,22 +372,22 @@ DicCreateNickname (const char *dicUsername, char *dicNickname1, char *dicNicknam
 
    /*converts uper to lower case*/
    dicBuffer = dicFirstName;
-   while (dicBuffer != DIC_EOS)
+   while (*dicBuffer != DIC_EOS)
    {
-      if ((dicBuffer > 'A') && (dicBuffer < 'Z'))
-         dicBuffer += 'a' - 'A';
+      if ((*dicBuffer > 'A') && (*dicBuffer < 'Z'))
+         *dicBuffer += 'a' - 'A';
    }
    dicBuffer = dicLastName;
-   while (dicBuffer != DIC_EOS)
+   while (*dicBuffer != DIC_EOS)
    {
-      if ((dicBuffer > 'A') && (dicBuffer < 'Z'))
-         dicBuffer += 'a' - 'A';
+      if ((*dicBuffer > 'A') && (*dicBuffer < 'Z'))
+         *dicBuffer += 'a' - 'A';
    }
    dicBuffer = dicMidleName;
-   while ((dicBuffer != DIC_EOS) && (dicBuffer != DIC_EOS))
+   while ((*dicBuffer != DIC_EOS) && (*dicBuffer != DIC_EOS))
    {
-      if ((dicBuffer > 'A') && (dicBuffer < 'Z'))
-         dicBuffer += 'a' - 'A';
+      if ((*dicBuffer > 'A') && (*dicBuffer < 'Z'))
+         *dicBuffer += 'a' - 'A';
    }
 
    dicReturnCode = snprintf (dicNickname1, DIC_NICKNAME_MAX_LENGTH + 1, "%s.%s", dicFirstName, dicLastName);
@@ -533,7 +535,7 @@ DicCheckPassword (char *dicPassword, char *dicEncryptedPassword)
 
    DicGetCryptAlgorithm (dicEncryptedPassword, &dicAlgorithm);
 
-   if (dicAlgorithm == Des)
+   if (dicAlgorithm == dicDes)
       strncpy (dicSalt, dicEncryptedPassword, 2);
    else
       strncpy (dicSalt, dicEncryptedPassword, DIC_SALT_MAX_LENGTH + 4);
@@ -592,7 +594,7 @@ DicGetUsers (dicUserDataType **dicFirstUser)
       if (*(dicTokenPointer - 1) == ':')
       {
          dicUser->password[0] = DIC_EOS;
-         strcpy (dicUser->profile, dicTokenPointer);
+         dicUser->profile = strtoul (dicTokenPointer, &validation, 10);
       }
       else
       {
@@ -602,7 +604,7 @@ DicGetUsers (dicUserDataType **dicFirstUser)
       strcpy (dicUser->username, strtok (NULL, ":"));
       strcpy (dicUser->email, strtok (NULL, "\n"));
 
-      dicUser->previus = dicPreviousUser;
+      dicUser->previous = dicPreviousUser;
 
       if (dicPreviousUser != NULL)
          dicPreviousUser->next = dicUser;
@@ -656,10 +658,10 @@ DicAuthenticateUser (dicUserDataType *dicUser)
       {
          if (!DicCheckPassword (dicUser->password, dicUserListElement->password))
          {
-            strcpy (dicUser->userId, dicUserListElement->userId);
+            dicUser->userId = dicUserListElement->userId;
             strcpy (dicUser->username, dicUserListElement->username);
             strcpy (dicUser->email, dicUserListElement->email);
-            strcpy (dicUser->profile, dicUserListElement->profile);
+            dicUser->profile = dicUserListElement->profile;
             return dicOk;
          }
          dicNicknameOccourrance++;

@@ -39,7 +39,7 @@ typedef enum
 	dicUserEmailNotFound,
 	dicInvalidPassword,
 	dicInvalidPasswordConfirmation,
-	dicIcorrectPassword,
+	dicIncorrectPassword,
 	dicEmptyUsersFile,
 	dicUsersFileNotExist,
 	dicRequestingUsersFileNotExist,

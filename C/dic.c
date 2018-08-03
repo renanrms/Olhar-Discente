@@ -9,16 +9,20 @@
  * $Log$
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <getopt.h>
 
 #include "dicAddUser.h"
 #include "dicRequestRegistration.h"
-#include "dicUserInterface.h"
-#include "dicGetUsers.h"
+#include "dicGetPendingRegistrationRequests.h"
+#include "dicGetPendingRegistrationRequestsPerUser.h"
 #include "dicAcceptInvite.h"
+#include "dicRejectInvite.h"
 #include "dicShowCliHelp.h"
-#include "dicFunctions.h"
 #include "dicUserInterface.h"
+#include "dicFunctions.h"
 #include "dicErrors.h"
 #include "dicTypes.h"
 #include "dicConst.h"
@@ -83,9 +87,28 @@ main (int argc, char **argv)
 	dicUserData = malloc (sizeof (dicUserDataType));
 	dicCurrentUser = malloc (sizeof (dicUserDataType));
 
-	while ((dicShotrOption = getopt_long (argc, argv, dicShortOptions, dicLongOptions, &dicLongOptionIndex)) != -1) /*Is -1 when argument list is exhausted*/
+	dicUserData->nickname[0]                = DIC_EOS;
+	dicUserData->username[0]                = DIC_EOS;
+	dicUserData->usernameConfirmation[0]    = DIC_EOS;
+	dicUserData->email[0]                   = DIC_EOS;
+	dicUserData->emailConfirmation[0]       = DIC_EOS;
+	dicUserData->password[0]                = DIC_EOS;
+	dicUserData->passwordConfirmation[0]    = DIC_EOS;
+
+	dicCurrentUser->nickname[0]             = DIC_EOS;
+	dicCurrentUser->username[0]             = DIC_EOS;
+	dicCurrentUser->usernameConfirmation[0] = DIC_EOS;
+	dicCurrentUser->email[0]                = DIC_EOS;
+	dicCurrentUser->emailConfirmation[0]    = DIC_EOS;
+	dicCurrentUser->password[0]             = DIC_EOS;
+	dicCurrentUser->passwordConfirmation[0] = DIC_EOS;
+
+	dicProfileString[0]                     = DIC_EOS;
+	dicFriendEmail[0]                       = DIC_EOS;
+
+	while ((dicShortOption = getopt_long (argc, argv, dicShortOptions, dicLongOptions, &dicLongOptionIndex)) != -1) /*Is -1 when argument list is exhausted*/
 	{
-		switch (dicShotrOption)
+		switch (dicShortOption)
 		{
 			case 'h':
 
@@ -143,28 +166,28 @@ main (int argc, char **argv)
 				if ((dicUserData->username[0] != DIC_EOS)
 				 && (dicUserData->usernameConfirmation[0] != DIC_EOS)
 				 && (dicUserData->email[0] != DIC_EOS)
-				 && (dicUserData->emailConfirmation[0] ! DIC_EOS))
+				 && (dicUserData->emailConfirmation[0] != DIC_EOS))
 				{
 					if (getuid () == DIC_ADMINISTRATOR_USER_IDENTIFIER)
 					{
-						dicUserData->password = getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage));
-						dicUserData->passwordConfirmation = getpass (DicGetCliUserInterfaceMessage (dicPasswordConfirmationMessage, dicLanguage));
+						strcpy (dicUserData->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
+						strcpy (dicUserData->passwordConfirmation, getpass (DicGetCliUserInterfaceMessage (dicPasswordConfirmationMessage, dicLanguage)));
 						
-						dicUserData->userIdentifier = 0;
+						dicUserData->userId = 0;
 						dicUserData->profile = 0;
-						dicUserData->nickname = ""; 
+						dicUserData->nickname[0] = DIC_EOS; 
 						dicUserData->next = NULL;
 						dicUserData->previous = NULL;
 
 						dicReturnCode = DicAddUser (dicUserData);
 
-						if (returnCode == dicOk)
+						if (dicReturnCode == dicOk)
 						{
 							printf ("%s\n", DicGetCliUserInterfaceMessage (dicSuccessMessage, dicLanguage));
 						}
 						else
 						{
-							printf ("%s\n", dicReturnCode);
+							printf ("%s\n", DicGetCliErrorMessage (dicReturnCode, dicLanguage));
 							exit (dicReturnCode);
 						}
 					}
@@ -258,7 +281,7 @@ main (int argc, char **argv)
 					&& dicProfileString[0]                  !=  DIC_EOS
 				)
 				{
-					dicCurrentUser->password = getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage));
+					strcpy (dicCurrentUser->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
 					dicReturnCode = DicAuthenticateUser (dicCurrentUser);
 					if (dicReturnCode != dicOk)
 					{
@@ -277,7 +300,7 @@ main (int argc, char **argv)
 					}
 
 
-					if ((dicCurrentUser->profile % 2) = 1) /*if user is administrator*/
+					if ((dicCurrentUser->profile % 2) == 1) /*if user is administrator*/
 					{
 						dicReturnCode = DicAddUser (dicUserData);
 						if (dicReturnCode == dicOk)
@@ -364,7 +387,7 @@ main (int argc, char **argv)
 				}
 
 				/*Authenticate current user*/
-				dicCurrentUser->password = getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage));
+				strcpy (dicCurrentUser->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
 				dicReturnCode = DicAuthenticateUser (dicCurrentUser);
 				if (dicReturnCode != dicOk)
 				{
@@ -382,7 +405,7 @@ main (int argc, char **argv)
 					exit (dicInvalidProfile);
 				}
 
-				if ((dicCurrentUser->profile % 2) = 1) /*if user is administrator*/
+				if ((dicCurrentUser->profile % 2) == 1) /*if user is administrator*/
 				{
 					/*invite user*/
 					dicReturnCode = DicAddUser (dicUserData);
@@ -399,7 +422,7 @@ main (int argc, char **argv)
 				}
 				else if ((dicCurrentUser->profile % 2) == 2 || (dicCurrentUser->profile % 2) == 3) /*if user is teacher*/
 				{
-					if ((dicUserData->profile % 2) = 1) /*invited user is administrator*/
+					if ((dicUserData->profile % 2) == 1) /*invited user is administrator*/
 					{
 						/*have not permission*/
 						printf ("%s\n", DicGetCliErrorMessage (dicHaveNotPermission, dicLanguage));
@@ -475,10 +498,10 @@ main (int argc, char **argv)
 				}
 
 				/*Authenticate current user*/
-				dicCurrentUser->password = getpass (DicGetCliUserInterfaceMessage (dicTempPasswordMessage, dicLanguage));
+				strcpy (dicCurrentUser->password, getpass (DicGetCliUserInterfaceMessage (dicTempPasswordMessage, dicLanguage)));
 				
-				dicUserData->password = getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage));
-				dicUserData->passwordConfirmation = getpass (DicGetCliUserInterfaceMessage (dicPasswordConfirmationMessage, dicLanguage));
+				strcpy (dicUserData->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
+				strcpy (dicUserData->passwordConfirmation, getpass (DicGetCliUserInterfaceMessage (dicPasswordConfirmationMessage, dicLanguage)));
 
 				dicReturnCode = DicAcceptInvite (dicCurrentUser->password, dicUserData);
 				if (dicReturnCode != dicOk)
@@ -522,7 +545,7 @@ main (int argc, char **argv)
 				}
 
 				/*Authenticate current user*/
-				dicCurrentUser->password = getpass (DicGetCliUserInterfaceMessage (dicTempPasswordMessage, dicLanguage));
+				strcpy (dicCurrentUser->password, getpass (DicGetCliUserInterfaceMessage (dicTempPasswordMessage, dicLanguage)));
 			
 				dicReturnCode = DicRejectInvite (dicCurrentUser->password, dicCurrentUser->nickname);
 				if (dicReturnCode != dicOk)
@@ -601,8 +624,8 @@ main (int argc, char **argv)
 					exit (dicInvalidProfile);
 				}
 
-				dicUserData->password = getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage));
-				dicUserData->password = getpass (DicGetCliUserInterfaceMessage (dicPasswordConfirmationMessage, dicLanguage));
+				strcpy (dicUserData->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
+				strcpy (dicUserData->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordConfirmationMessage, dicLanguage)));
 
 				dicReturnCode = DicRequestRegistration (dicFriendEmail, dicUserData);
 				if (dicReturnCode != dicOk)
@@ -646,7 +669,7 @@ main (int argc, char **argv)
 				}
 
 				/*Authenticate current user*/
-				dicCurrentUser->password = getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage));
+				strcpy (dicCurrentUser->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
 				dicReturnCode = DicAuthenticateUser (dicCurrentUser);
 				if (dicReturnCode != dicOk)
 				{
@@ -705,7 +728,7 @@ main (int argc, char **argv)
 				}
 
 				/*Authenticate current user*/
-				dicCurrentUser->password = getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage));
+				strcpy (dicCurrentUser->password, getpass (DicGetCliUserInterfaceMessage (dicPasswordMessage, dicLanguage)));
 				dicReturnCode = DicAuthenticateUser (dicCurrentUser);
 				if (dicReturnCode != dicOk)
 				{

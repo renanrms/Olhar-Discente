@@ -5,6 +5,7 @@
 **/*.core
 
 C/dicUserInterface
+C/dicHtmlToC
 
 **/RCS/
 
