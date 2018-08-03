@@ -21,27 +21,31 @@ typedef enum
 {
    dicEnglishMessage,
    dicPortugueseMessage,
+   /*Web and Ncurses fields*/
    dicLoginMessage,
    dicPasswordMessage,
    dicPasswordConfirmationMessage,
-   dicSignInButtonMessage,
-   dicForgotMyPasswordMessage,
-   dicTermsOfUseMessage,
-   dicCreateAnAccountMessage,
-   dicHelpMessage,
-   dicContactUsMessage,
+   dicTempPasswordMessage,
    dicUserNameMessage,
    dicUserNameConfirmationMessage,
    dicEmailMessage,
    dicEmailConfirmationMessage,
-   dicRegisterButtonMessage,
+   /*Web links and Ncurses options*/
+   dicContactUsMessage,
+   dicTermsOfUseMessage,
    dicHomeMessage,
+   dicForgotMyPasswordMessage,
+   dicCreateAnAccountMessage,
+   dicHelpMessage,
+   /*Web and Ncurses buttons*/
+   dicSignInButtonMessage,
    dicSendButtonMessage,
-   dicForHelpMessage,
-   dicCreatedUserMessage,
-   dicCorrectAuthenticateMessage,
-   dicTempPasswordMessage,
+   dicRegisterButtonMessage,
+   /*Event and notification massages*/
    dicSuccessMessage,
+   dicForHelpMessage,
+   dicCorrectAuthenticateMessage,
+   /*Number of messages*/
    dicUserInterfaceMessagesAmount
 } dicUserInterfaceMessageType;
 

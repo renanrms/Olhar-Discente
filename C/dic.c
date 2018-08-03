@@ -54,7 +54,7 @@ main (int argc, char **argv)
 	{
 		{"help",       optional_argument, NULL, 'h'},
 		{"Configure",  optional_argument, NULL, 'C'},
-		{"Ncurses",    optional_argument, NULL, 'N'},  /*initial configure*/
+		{"Ncurses",    optional_argument, NULL, 'N'},
 		{"add",        optional_argument, NULL, 'a'},
 		{"invite",     optional_argument, NULL, 'i'},
 		{"accept",     optional_argument, NULL, 't'},
